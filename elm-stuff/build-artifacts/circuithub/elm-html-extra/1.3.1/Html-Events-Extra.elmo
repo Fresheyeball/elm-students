@@ -1,0 +1,135 @@
+Elm.Html = Elm.Html || {};
+Elm.Html.Events = Elm.Html.Events || {};
+Elm.Html.Events.Extra = Elm.Html.Events.Extra || {};
+Elm.Html.Events.Extra.make = function (_elm) {
+   "use strict";
+   _elm.Html = _elm.Html || {};
+   _elm.Html.Events = _elm.Html.Events || {};
+   _elm.Html.Events.Extra = _elm.Html.Events.Extra || {};
+   if (_elm.Html.Events.Extra.values)
+   return _elm.Html.Events.Extra.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   $moduleName = "Html.Events.Extra",
+   $Basics = Elm.Basics.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
+   $Json$Decode = Elm.Json.Decode.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $String = Elm.String.make(_elm);
+   var targetValueIntParse = A2($Json$Decode.customDecoder,
+   $Html$Events.targetValue,
+   $String.toInt);
+   var targetValueFloatParse = A2($Json$Decode.customDecoder,
+   $Html$Events.targetValue,
+   $String.toFloat);
+   var targetValueMaybe = A2($Json$Decode.customDecoder,
+   $Html$Events.targetValue,
+   function (s) {
+      return $Result.Ok(_U.eq(s,
+      "") ? $Maybe.Nothing : $Maybe.Just(s));
+   });
+   var targetValueMaybeInt = function () {
+      var traverse = F2(function (f,
+      mx) {
+         return function () {
+            switch (mx.ctor)
+            {case "Just":
+               return A2($Result.map,
+                 $Maybe.Just,
+                 f(mx._0));
+               case "Nothing":
+               return $Result.Ok($Maybe.Nothing);}
+            _U.badCase($moduleName,
+            "between lines 92 and 95");
+         }();
+      });
+      return A2($Json$Decode.customDecoder,
+      targetValueMaybe,
+      traverse($String.toInt));
+   }();
+   var targetValueMaybeFloatParse = function () {
+      var traverse = F2(function (f,
+      mx) {
+         return function () {
+            switch (mx.ctor)
+            {case "Just":
+               return A2($Result.map,
+                 $Maybe.Just,
+                 f(mx._0));
+               case "Nothing":
+               return $Result.Ok($Maybe.Nothing);}
+            _U.badCase($moduleName,
+            "between lines 116 and 119");
+         }();
+      });
+      return A2($Json$Decode.customDecoder,
+      targetValueMaybe,
+      traverse($String.toFloat));
+   }();
+   var targetValueMaybeIntParse = function () {
+      var traverse = F2(function (f,
+      mx) {
+         return function () {
+            switch (mx.ctor)
+            {case "Just":
+               return A2($Result.map,
+                 $Maybe.Just,
+                 f(mx._0));
+               case "Nothing":
+               return $Result.Ok($Maybe.Nothing);}
+            _U.badCase($moduleName,
+            "between lines 126 and 129");
+         }();
+      });
+      return A2($Json$Decode.customDecoder,
+      targetValueMaybe,
+      traverse($String.toInt));
+   }();
+   var targetValueInt = A2($Json$Decode.at,
+   _L.fromArray(["target"
+                ,"valueAsNumber"]),
+   $Json$Decode.$int);
+   var targetValueFloat = $Json$Decode.customDecoder(A2($Json$Decode.at,
+   _L.fromArray(["target"
+                ,"valueAsNumber"]),
+   $Json$Decode.$float))(function (v) {
+      return $Basics.isNaN(v) ? $Result.Err("Not a number") : $Result.Ok(v);
+   });
+   var targetValueMaybeFloat = A2($Json$Decode.andThen,
+   targetValueMaybe,
+   function (mval) {
+      return function () {
+         switch (mval.ctor)
+         {case "Just":
+            return A2($Json$Decode.map,
+              $Maybe.Just,
+              targetValueFloat);
+            case "Nothing":
+            return $Json$Decode.succeed($Maybe.Nothing);}
+         _U.badCase($moduleName,
+         "between lines 84 and 89");
+      }();
+   });
+   var charCode = A2($Json$Decode.map,
+   function ($) {
+      return $Maybe.map($Basics.fst)($String.uncons($));
+   },
+   A2($Json$Decode._op[":="],
+   "charCode",
+   $Json$Decode.string));
+   _elm.Html.Events.Extra.values = {_op: _op
+                                   ,charCode: charCode
+                                   ,targetValueFloat: targetValueFloat
+                                   ,targetValueInt: targetValueInt
+                                   ,targetValueMaybe: targetValueMaybe
+                                   ,targetValueMaybeFloat: targetValueMaybeFloat
+                                   ,targetValueMaybeInt: targetValueMaybeInt
+                                   ,targetValueFloatParse: targetValueFloatParse
+                                   ,targetValueIntParse: targetValueIntParse
+                                   ,targetValueMaybeFloatParse: targetValueMaybeFloatParse
+                                   ,targetValueMaybeIntParse: targetValueMaybeIntParse};
+   return _elm.Html.Events.Extra.values;
+};

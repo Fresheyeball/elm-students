@@ -1,0 +1,1356 @@
+Elm.Html = Elm.Html || {};
+Elm.Html.Shorthand = Elm.Html.Shorthand || {};
+Elm.Html.Shorthand.make = function (_elm) {
+   "use strict";
+   _elm.Html = _elm.Html || {};
+   _elm.Html.Shorthand = _elm.Html.Shorthand || {};
+   if (_elm.Html.Shorthand.values)
+   return _elm.Html.Shorthand.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   $moduleName = "Html.Shorthand",
+   $Basics = Elm.Basics.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Attributes$Extra = Elm.Html.Attributes.Extra.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
+   $Html$Events$Extra = Elm.Html.Events.Extra.make(_elm),
+   $Html$Shorthand$Event = Elm.Html.Shorthand.Event.make(_elm),
+   $Html$Shorthand$Internal = Elm.Html.Shorthand.Internal.make(_elm),
+   $Html$Shorthand$Type = Elm.Html.Shorthand.Type.make(_elm),
+   $Json$Decode = Elm.Json.Decode.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $String = Elm.String.make(_elm);
+   var meter$ = F2(function (p,t) {
+      return function () {
+         var filterJust = $List.filterMap($Basics.identity);
+         return A2($Html.meter,
+         A2($Basics._op["++"],
+         _L.fromArray([$Html$Attributes.value($Basics.toString(p.value))
+                      ,$Html$Attributes.min($Basics.toString($Basics.min))
+                      ,$Html$Attributes.max($Basics.toString(p.max))]),
+         filterJust(_L.fromArray([A2($Maybe.map,
+                                 function ($) {
+                                    return $Html$Attributes$Extra.low($Basics.toString($));
+                                 },
+                                 p.low)
+                                 ,A2($Maybe.map,
+                                 function ($) {
+                                    return $Html$Attributes$Extra.high($Basics.toString($));
+                                 },
+                                 p.high)
+                                 ,A2($Maybe.map,
+                                 function ($) {
+                                    return $Html$Attributes$Extra.optimum($Basics.toString($));
+                                 },
+                                 p.optimum)]))),
+         _L.fromArray([$Html.text(t)]));
+      }();
+   });
+   var progress$ = F2(function (p,
+   t) {
+      return A2($Html.progress,
+      _L.fromArray([$Html$Attributes.value($Basics.toString(p.value))
+                   ,$Html$Attributes.max($Basics.toString(p.max))]),
+      _L.fromArray([$Html.text(t)]));
+   });
+   var option$ = function (p) {
+      return A2($Html.option,
+      _L.fromArray([A2($Html$Attributes.stringProperty,
+                   "label",
+                   p.label)
+                   ,$Html$Attributes.value($Basics.toString(p.value))
+                   ,$Html$Attributes.selected(p.selected)]),
+      _L.fromArray([]));
+   };
+   var option_ = F2(function (val,
+   sel) {
+      return A2($Html.option,
+      _L.fromArray([$Html$Attributes.selected(sel)]),
+      _L.fromArray([$Html.text(val)]));
+   });
+   var buttonReset_ = function (t) {
+      return A2($Html.button,
+      _L.fromArray([$Html$Attributes.type$("reset")]),
+      _L.fromArray([$Html.text(t)]));
+   };
+   var buttonSubmit_ = function (t) {
+      return A2($Html.button,
+      _L.fromArray([$Html$Attributes.type$("submit")]),
+      _L.fromArray([$Html.text(t)]));
+   };
+   var buttonLink_ = F3(function (t,
+   clickAddr,
+   click) {
+      return A2($Html.button,
+      _L.fromArray([$Html$Attributes.type$("button")
+                   ,A2($Html$Events.onClick,
+                   clickAddr,
+                   click)]),
+      _L.fromArray([$Html.text(t)]));
+   });
+   var button_ = F3(function (t,
+   clickAddr,
+   click) {
+      return A2($Html.button,
+      _L.fromArray([$Html$Attributes.type$("button")
+                   ,A2($Html$Events.onClick,
+                   clickAddr,
+                   click)]),
+      _L.fromArray([$Html.text(t)]));
+   });
+   var label_ = F2(function ($for,
+   t) {
+      return A2($Html.label,
+      _L.fromArray([$Html$Attributes.$for($for)]),
+      _L.fromArray([$Html.text(t)]));
+   });
+   var legend_ = function (t) {
+      return A2($Html.legend,
+      _L.fromArray([]),
+      _L.fromArray([$Html.text(t)]));
+   };
+   var fieldset_ = function (disabled) {
+      return $Html.fieldset(_L.fromArray([$Html$Attributes.disabled(disabled)]));
+   };
+   var th_ = $Html.th(_L.fromArray([]));
+   var td_ = $Html.td(_L.fromArray([]));
+   var tr_ = $Html.tr(_L.fromArray([]));
+   var tfoot_ = $Html.tfoot(_L.fromArray([]));
+   var thead_ = $Html.thead(_L.fromArray([]));
+   var tbody_ = $Html.tbody(_L.fromArray([]));
+   var caption_ = $Html.caption(_L.fromArray([]));
+   var table_ = $Html.table(_L.fromArray([]));
+   var audio_ = function (url) {
+      return A2($Html.audio,
+      _L.fromArray([$Html$Attributes.src(url)]),
+      _L.fromArray([]));
+   };
+   var video_ = function (url) {
+      return A2($Html.video,
+      _L.fromArray([$Html$Attributes.src(url)]),
+      _L.fromArray([]));
+   };
+   var param$ = F2(function (n,v) {
+      return A2($Html.param,
+      _L.fromArray([$Html$Attributes.name(n)
+                   ,$Html$Attributes.value(v)]),
+      _L.fromArray([]));
+   });
+   var img_ = F4(function (w,
+   h,
+   s,
+   a) {
+      return A2($Html.img,
+      _L.fromArray([$Html$Attributes.width(w)
+                   ,$Html$Attributes.height(h)
+                   ,$Html$Attributes.src(s)
+                   ,$Html$Attributes.alt(a)]),
+      _L.fromArray([]));
+   });
+   var del_ = $Html.del(_L.fromArray([]));
+   var ins_ = $Html.ins(_L.fromArray([]));
+   var wbr$ = A2($Html.wbr,
+   _L.fromArray([]),
+   _L.fromArray([]));
+   var br$ = A2($Html.br,
+   _L.fromArray([]),
+   _L.fromArray([]));
+   var span_ = $Html.span(_L.fromArray([]));
+   var bdo$ = function (dir) {
+      return $Html.bdo(_L.fromArray([$Html$Attributes.dir(function () {
+         switch (dir.ctor)
+         {case "AutoDirection":
+            return "auto";
+            case "LeftToRight":
+            return "ltr";
+            case "RightToLeft":
+            return "rtl";}
+         _U.badCase($moduleName,
+         "between lines 1016 and 1020");
+      }())]));
+   };
+   var bdi_ = function (t) {
+      return A2($Html.bdi,
+      _L.fromArray([]),
+      _L.fromArray([$Html.text(t)]));
+   };
+   var rp_ = function (t) {
+      return A2($Html.rp,
+      _L.fromArray([]),
+      _L.fromArray([$Html.text(t)]));
+   };
+   var rt_ = function (t) {
+      return A2($Html.rt,
+      _L.fromArray([]),
+      _L.fromArray([$Html.text(t)]));
+   };
+   var ruby_ = $Html.ruby(_L.fromArray([]));
+   var mark_ = $Html.mark(_L.fromArray([]));
+   var u_ = function (t) {
+      return A2($Html.u,
+      _L.fromArray([]),
+      _L.fromArray([$Html.text(t)]));
+   };
+   var b_ = function (t) {
+      return A2($Html.b,
+      _L.fromArray([]),
+      _L.fromArray([$Html.text(t)]));
+   };
+   var i_ = function (t) {
+      return A2($Html.i,
+      _L.fromArray([]),
+      _L.fromArray([$Html.text(t)]));
+   };
+   var sup_ = function (t) {
+      return A2($Html.sup,
+      _L.fromArray([]),
+      _L.fromArray([$Html.text(t)]));
+   };
+   var sub_ = function (t) {
+      return A2($Html.sub,
+      _L.fromArray([]),
+      _L.fromArray([$Html.text(t)]));
+   };
+   var kbd_ = $Html.kbd(_L.fromArray([]));
+   var samp_ = $Html.samp(_L.fromArray([]));
+   var var_ = function (t) {
+      return A2($Html.$var,
+      _L.fromArray([]),
+      _L.fromArray([$Html.text(t)]));
+   };
+   var code_ = $Html.code(_L.fromArray([]));
+   var abbr_ = function (t) {
+      return A2($Html.abbr,
+      _L.fromArray([]),
+      _L.fromArray([$Html.text(t)]));
+   };
+   var q_ = function (t) {
+      return A2($Html.q,
+      _L.fromArray([]),
+      _L.fromArray([$Html.text(t)]));
+   };
+   var cite_ = $Html.cite(_L.fromArray([]));
+   var s_ = function (t) {
+      return A2($Html.s,
+      _L.fromArray([]),
+      _L.fromArray([$Html.text(t)]));
+   };
+   var small_ = function (t) {
+      return A2($Html.small,
+      _L.fromArray([]),
+      _L.fromArray([$Html.text(t)]));
+   };
+   var strong_ = function (t) {
+      return A2($Html.em,
+      _L.fromArray([]),
+      _L.fromArray([$Html.text(t)]));
+   };
+   var em_ = function (t) {
+      return A2($Html.em,
+      _L.fromArray([]),
+      _L.fromArray([$Html.text(t)]));
+   };
+   var a_ = F2(function (href,t) {
+      return A2($Html.a,
+      _L.fromArray([$Html$Attributes.href(href)]),
+      _L.fromArray([$Html.text(t)]));
+   });
+   var div_ = $Html.div(_L.fromArray([]));
+   var figcaption_ = $Html.figcaption(_L.fromArray([]));
+   var dd_ = $Html.dd(_L.fromArray([]));
+   var dl_ = $Html.dl(_L.fromArray([]));
+   var li_ = $Html.li(_L.fromArray([]));
+   var ul_ = $Html.ul(_L.fromArray([]));
+   var ol_ = $Html.ol(_L.fromArray([]));
+   var blockquote_ = $Html.blockquote(_L.fromArray([]));
+   var pre_ = $Html.pre(_L.fromArray([]));
+   var hr_ = A2($Html.hr,
+   _L.fromArray([]),
+   _L.fromArray([]));
+   var p_ = $Html.p(_L.fromArray([]));
+   var main_ = $Html.main$(_L.fromArray([]));
+   var address_ = $Html.address(_L.fromArray([]));
+   var footer_ = $Html.footer(_L.fromArray([]));
+   var header_ = $Html.header(_L.fromArray([]));
+   var h6_ = function (t) {
+      return A2($Html.h6,
+      _L.fromArray([]),
+      _L.fromArray([$Html.text(t)]));
+   };
+   var h5_ = function (t) {
+      return A2($Html.h5,
+      _L.fromArray([]),
+      _L.fromArray([$Html.text(t)]));
+   };
+   var h4_ = function (t) {
+      return A2($Html.h4,
+      _L.fromArray([]),
+      _L.fromArray([$Html.text(t)]));
+   };
+   var h3_ = function (t) {
+      return A2($Html.h3,
+      _L.fromArray([]),
+      _L.fromArray([$Html.text(t)]));
+   };
+   var h2_ = function (t) {
+      return A2($Html.h2,
+      _L.fromArray([]),
+      _L.fromArray([$Html.text(t)]));
+   };
+   var h1_ = function (t) {
+      return A2($Html.h1,
+      _L.fromArray([]),
+      _L.fromArray([$Html.text(t)]));
+   };
+   var nav_ = $Html.nav(_L.fromArray([]));
+   var body_ = $Html.body(_L.fromArray([]));
+   var class$ = $Html$Shorthand$Internal.class$;
+   var body$ = function (p) {
+      return $Html.body(_L.fromArray([class$(p.$class)]));
+   };
+   var nav$ = function (p) {
+      return $Html.nav(_L.fromArray([class$(p.$class)]));
+   };
+   var h1$ = function (p) {
+      return $Html.h1(_L.fromArray([class$(p.$class)]));
+   };
+   var h2$ = function (p) {
+      return $Html.h2(_L.fromArray([class$(p.$class)]));
+   };
+   var h3$ = function (p) {
+      return $Html.h3(_L.fromArray([class$(p.$class)]));
+   };
+   var h4$ = function (p) {
+      return $Html.h4(_L.fromArray([class$(p.$class)]));
+   };
+   var h5$ = function (p) {
+      return $Html.h5(_L.fromArray([class$(p.$class)]));
+   };
+   var h6$ = function (p) {
+      return $Html.h6(_L.fromArray([class$(p.$class)]));
+   };
+   var header$ = function (p) {
+      return $Html.header(_L.fromArray([class$(p.$class)]));
+   };
+   var footer$ = function (p) {
+      return $Html.footer(_L.fromArray([class$(p.$class)]));
+   };
+   var address$ = function (p) {
+      return $Html.address(_L.fromArray([class$(p.$class)]));
+   };
+   var p$ = function (param) {
+      return $Html.p(_L.fromArray([class$(param.$class)]));
+   };
+   var pre$ = function (p) {
+      return $Html.pre(_L.fromArray([class$(p.$class)]));
+   };
+   var blockquote$ = function (p) {
+      return $Html.blockquote(_L.fromArray([class$(p.$class)
+                                           ,$Html$Attributes.cite(p.cite)]));
+   };
+   var ol$ = function (p) {
+      return $Html.ol(_L.fromArray([class$(p.$class)]));
+   };
+   var ul$ = function (p) {
+      return $Html.ul(_L.fromArray([class$(p.$class)]));
+   };
+   var li$ = function (p) {
+      return $Html.li(_L.fromArray([class$(p.$class)]));
+   };
+   var dl$ = function (p) {
+      return $Html.dl(_L.fromArray([class$(p.$class)]));
+   };
+   var dd$ = function (p) {
+      return $Html.dd(_L.fromArray([class$(p.$class)]));
+   };
+   var figcaption$ = function (p) {
+      return $Html.figcaption(_L.fromArray([class$(p.$class)]));
+   };
+   var div$ = function (p) {
+      return $Html.div(_L.fromArray([class$(p.$class)]));
+   };
+   var a$ = function (p) {
+      return $Html.a(_L.fromArray([class$(p.$class)
+                                  ,$Html$Attributes.href(p.href)]));
+   };
+   var em$ = function (p) {
+      return $Html.em(_L.fromArray([class$(p.$class)]));
+   };
+   var strong$ = function (p) {
+      return $Html.strong(_L.fromArray([class$(p.$class)]));
+   };
+   var small$ = function (p) {
+      return $Html.small(_L.fromArray([class$(p.$class)]));
+   };
+   var s$ = function (p) {
+      return $Html.s(_L.fromArray([class$(p.$class)]));
+   };
+   var cite$ = function (p) {
+      return $Html.cite(_L.fromArray([class$(p.$class)]));
+   };
+   var q$ = function (p) {
+      return $Html.q(_L.fromArray([class$(p.$class)
+                                  ,$Html$Attributes.cite(p.cite)]));
+   };
+   var abbr$ = function (p) {
+      return $Html.abbr(_L.fromArray([class$(p.$class)]));
+   };
+   var code$ = function (p) {
+      return $Html.code(_L.fromArray([class$(p.$class)]));
+   };
+   var var$ = function (p) {
+      return $Html.$var(_L.fromArray([class$(p.$class)]));
+   };
+   var samp$ = function (p) {
+      return $Html.samp(_L.fromArray([class$(p.$class)]));
+   };
+   var kbd$ = function (p) {
+      return $Html.kbd(_L.fromArray([class$(p.$class)]));
+   };
+   var sub$ = function (p) {
+      return $Html.sub(_L.fromArray([class$(p.$class)]));
+   };
+   var sup$ = function (p) {
+      return $Html.sup(_L.fromArray([class$(p.$class)]));
+   };
+   var i$ = function (p) {
+      return $Html.i(_L.fromArray([class$(p.$class)]));
+   };
+   var b$ = function (p) {
+      return $Html.b(_L.fromArray([class$(p.$class)]));
+   };
+   var u$ = function (p) {
+      return $Html.u(_L.fromArray([class$(p.$class)]));
+   };
+   var mark$ = function (p) {
+      return $Html.mark(_L.fromArray([class$(p.$class)]));
+   };
+   var ruby$ = function (p) {
+      return $Html.ruby(_L.fromArray([class$(p.$class)]));
+   };
+   var rt$ = function (p) {
+      return $Html.rt(_L.fromArray([class$(p.$class)]));
+   };
+   var rp$ = function (p) {
+      return $Html.rp(_L.fromArray([class$(p.$class)]));
+   };
+   var bdi$ = function (p) {
+      return $Html.bdi(_L.fromArray([class$(p.$class)]));
+   };
+   var span$ = function (p) {
+      return $Html.span(_L.fromArray([class$(p.$class)]));
+   };
+   var ins$ = function (p) {
+      return $Html.ins(_L.fromArray([class$(p.$class)
+                                    ,$Html$Attributes.cite(p.cite)
+                                    ,$Html$Attributes.datetime(p.datetime)]));
+   };
+   var del$ = function (p) {
+      return $Html.del(_L.fromArray([class$(p.$class)
+                                    ,$Html$Attributes.cite(p.cite)
+                                    ,$Html$Attributes.datetime(p.datetime)]));
+   };
+   var img$ = function (p) {
+      return A2($Html.img,
+      _L.fromArray([class$(p.$class)
+                   ,$Html$Attributes.src(p.src)
+                   ,$Html$Attributes.width(p.width)
+                   ,$Html$Attributes.height(p.height)
+                   ,$Html$Attributes.alt(p.alt)]),
+      _L.fromArray([]));
+   };
+   var video$ = function (p) {
+      return function () {
+         var filterJust = $List.filterMap($Basics.identity);
+         return $Html.video(A2($Basics._op["++"],
+         _L.fromArray([class$(p.$class)
+                      ,$Html$Attributes.width(p.width)
+                      ,$Html$Attributes.height(p.height)
+                      ,$Html$Attributes.autoplay(p.autoplay)
+                      ,$Html$Attributes.controls(p.controls)
+                      ,$Html$Attributes.loop(p.loop)]),
+         filterJust(_L.fromArray([A2($Maybe.map,
+                                 $Html$Attributes.src,
+                                 p.src)
+                                 ,A2($Maybe.map,
+                                 $Html$Attributes.stringProperty("preload"),
+                                 p.preload)
+                                 ,A2($Maybe.map,
+                                 $Html$Attributes.poster,
+                                 p.poster)
+                                 ,A2($Maybe.map,
+                                 $Html$Attributes$Extra.volume,
+                                 p.volume)]))));
+      }();
+   };
+   var audio$ = function (p) {
+      return function () {
+         var filterJust = $List.filterMap($Basics.identity);
+         return $Html.audio(A2($Basics._op["++"],
+         _L.fromArray([class$(p.$class)
+                      ,$Html$Attributes.autoplay(p.autoplay)
+                      ,$Html$Attributes.controls(p.controls)
+                      ,$Html$Attributes.loop(p.loop)]),
+         filterJust(_L.fromArray([A2($Maybe.map,
+                                 $Html$Attributes.src,
+                                 p.src)
+                                 ,A2($Maybe.map,
+                                 $Html$Attributes.stringProperty("preload"),
+                                 p.preload)
+                                 ,A2($Maybe.map,
+                                 $Html$Attributes.poster,
+                                 p.poster)
+                                 ,A2($Maybe.map,
+                                 $Html$Attributes$Extra.volume,
+                                 p.volume)]))));
+      }();
+   };
+   var table$ = function (p) {
+      return $Html.table(_L.fromArray([class$(p.$class)]));
+   };
+   var caption$ = function (p) {
+      return $Html.caption(_L.fromArray([class$(p.$class)]));
+   };
+   var tbody$ = function (p) {
+      return $Html.tbody(_L.fromArray([class$(p.$class)]));
+   };
+   var thead$ = function (p) {
+      return $Html.thead(_L.fromArray([class$(p.$class)]));
+   };
+   var tfoot$ = function (p) {
+      return $Html.tfoot(_L.fromArray([class$(p.$class)]));
+   };
+   var tr$ = function (p) {
+      return $Html.tr(_L.fromArray([class$(p.$class)]));
+   };
+   var td$ = function (p) {
+      return $Html.td(_L.fromArray([class$(p.$class)]));
+   };
+   var th$ = function (p) {
+      return $Html.th(_L.fromArray([class$(p.$class)]));
+   };
+   var form$ = function (p) {
+      return function () {
+         var onEnter$ = function (msg) {
+            return A3($Html$Events.on,
+            "keypress",
+            $Json$Decode.customDecoder($Html$Events.keyCode)(function (c) {
+               return _U.eq(c,
+               13) ? $Result.Ok({ctor: "_Tuple0"}) : $Result.Err("expected key code 13");
+            }),
+            $Basics.always(msg));
+         };
+         var filterJust = $List.filterMap($Basics.identity);
+         return $Html.form(A2($List._op["::"],
+         class$(p.$class),
+         A2($List._op["::"],
+         $Html$Attributes.novalidate(p.novalidate),
+         filterJust(_L.fromArray([A2($Maybe.map,
+                                 function ($) {
+                                    return A2($Html$Events.on,
+                                    "submit",
+                                    $Json$Decode.value)($Basics.always($));
+                                 },
+                                 p.update.onSubmit)
+                                 ,A2($Maybe.map,
+                                 onEnter$,
+                                 p.update.onSubmit)])))));
+      }();
+   };
+   var fieldset$ = function (p) {
+      return $Html.fieldset(_L.fromArray([class$(p.$class)
+                                         ,$Html$Attributes.disabled(p.disabled)]));
+   };
+   var legend$ = function (p) {
+      return $Html.legend(_L.fromArray([class$(p.$class)]));
+   };
+   var label$ = function (p) {
+      return $Html.label(_L.fromArray([class$(p.$class)
+                                      ,$Html$Attributes.$for(p.$for)]));
+   };
+   var button$ = function (p) {
+      return $Html.button(_L.fromArray([class$(p.$class)
+                                       ,$Html$Attributes.type$("button")
+                                       ,A3($Html$Events.on,
+                                       "click",
+                                       $Json$Decode.value,
+                                       $Basics.always(p.update.onClick))]));
+   };
+   var buttonLink$ = function (p) {
+      return $Html.a(_L.fromArray([class$(p.$class)
+                                  ,$Html$Attributes.href("#")
+                                  ,A3($Html$Events.on,
+                                  "click",
+                                  $Json$Decode.value,
+                                  $Basics.always(p.update.onClick))]));
+   };
+   var buttonSubmit$ = function (p) {
+      return $Html.button(_L.fromArray([class$(p.$class)
+                                       ,$Html$Attributes.type$("submit")]));
+   };
+   var buttonReset$ = function (p) {
+      return $Html.button(_L.fromArray([class$(p.$class)
+                                       ,$Html$Attributes.type$("reset")]));
+   };
+   var id$ = $Html$Shorthand$Internal.id$;
+   var section_ = function (i) {
+      return $Html.section(_L.fromArray([id$(i)]));
+   };
+   var section$ = function (p) {
+      return $Html.section(_L.fromArray([class$(p.$class)
+                                        ,id$(p.id)]));
+   };
+   var article_ = function (i) {
+      return $Html.article(_L.fromArray([id$(i)]));
+   };
+   var article$ = function (p) {
+      return $Html.article(_L.fromArray([class$(p.$class)
+                                        ,id$(p.id)]));
+   };
+   var aside$ = function (p) {
+      return $Html.aside(_L.fromArray([class$(p.$class)
+                                      ,id$(p.id)]));
+   };
+   var dt$ = function (p) {
+      return $Html.dt(_L.fromArray([class$(p.$class)
+                                   ,id$(p.id)]));
+   };
+   var figure$ = function (p) {
+      return $Html.figure(_L.fromArray([class$(p.$class)
+                                       ,id$(p.id)]));
+   };
+   var dfn$ = function (p) {
+      return $Html.dfn(_L.fromArray([class$(p.$class)
+                                    ,id$(p.id)]));
+   };
+   var embed$ = function (p) {
+      return A2($Html.embed,
+      _L.fromArray([class$(p.$class)
+                   ,id$(p.id)
+                   ,$Html$Attributes.src(p.src)
+                   ,$Html$Attributes.type$(p.type$)
+                   ,$Html$Attributes.width(p.width)
+                   ,$Html$Attributes.height(p.height)]),
+      _L.fromArray([]));
+   };
+   var encodeClass = $Html$Shorthand$Internal.encodeClass;
+   var encodeId = $Html$Shorthand$Internal.encodeId;
+   var iframe$ = function (p) {
+      return function () {
+         var filterJust = $List.filterMap($Basics.identity);
+         var i$ = encodeId(p.name);
+         return A2($Html.iframe,
+         A2($Basics._op["++"],
+         _L.fromArray([class$(p.$class)
+                      ,$Html$Attributes.id(i$)
+                      ,$Html$Attributes.name(i$)
+                      ,$Html$Attributes.src(p.src)
+                      ,$Html$Attributes.width(p.width)
+                      ,$Html$Attributes.height(p.height)
+                      ,$Html$Attributes.seamless(p.seamless)]),
+         filterJust(_L.fromArray([A2($Maybe.map,
+         $Html$Attributes.sandbox,
+         p.sandbox)]))),
+         _L.fromArray([]));
+      }();
+   };
+   var object$ = function (p) {
+      return function () {
+         var filterJust = $List.filterMap($Basics.identity);
+         var attrs = filterJust(_L.fromArray([A2($Maybe.map,
+         function ($) {
+            return $Html$Attributes.usemap($String.cons(_U.chr("#"))(encodeId($)));
+         },
+         p.useMapName)]));
+         var i$ = encodeId(p.name);
+         return $Html.object(A2($Basics._op["++"],
+         _L.fromArray([class$(p.$class)
+                      ,$Html$Attributes.id(i$)
+                      ,$Html$Attributes.name(i$)
+                      ,A2($Html$Attributes.attribute,
+                      "data",
+                      p.data)
+                      ,$Html$Attributes.type$(p.type$)]),
+         A2($Basics._op["++"],
+         attrs,
+         _L.fromArray([$Html$Attributes.height(p.height)
+                      ,$Html$Attributes.width(p.width)]))));
+      }();
+   };
+   var inputField$ = F2(function (p,
+   attrs) {
+      return function () {
+         var i$ = encodeId(p.name);
+         var filterJust = $List.filterMap($Basics.identity);
+         var pattrs = A2($Basics._op["++"],
+         _L.fromArray([$Html$Attributes.type$(p.type$)
+                      ,$Html$Attributes.id(i$)
+                      ,$Html$Attributes.name(i$)
+                      ,$Html$Attributes.required(p.required)]),
+         filterJust(_L.fromArray([A2($Maybe.map,
+                                 class$,
+                                 _U.eq(p.$class,
+                                 "") ? $Maybe.Nothing : $Maybe.Just(p.$class))
+                                 ,A2($Maybe.map,
+                                 function (onEvent) {
+                                    return A2($Html$Shorthand$Event.onInput,
+                                    A2($Html$Shorthand$Event.messageDecoder,
+                                    p.decoder,
+                                    onEvent),
+                                    $Basics.identity);
+                                 },
+                                 p.update.onInput)
+                                 ,A2($Maybe.map,
+                                 function (onEvent) {
+                                    return A2($Html$Shorthand$Event.onEnter,
+                                    A2($Html$Shorthand$Event.messageDecoder,
+                                    p.decoder,
+                                    onEvent),
+                                    $Basics.identity);
+                                 },
+                                 p.update.onEnter)
+                                 ,A2($Maybe.map,
+                                 function (onEvent) {
+                                    return A2($Html$Shorthand$Event.onKeyboardLost,
+                                    A2($Html$Shorthand$Event.messageDecoder,
+                                    p.decoder,
+                                    onEvent),
+                                    $Basics.identity);
+                                 },
+                                 p.update.onKeyboardLost)
+                                 ,A2($Maybe.map,
+                                 $Html$Attributes.placeholder,
+                                 p.placeholder)
+                                 ,A2($Maybe.map,
+                                 $Html$Attributes.pattern,
+                                 p.pattern)])));
+         return A2($Html.input,
+         A2($Basics._op["++"],
+         pattrs,
+         attrs),
+         _L.fromArray([]));
+      }();
+   });
+   var inputText$ = function (p) {
+      return A2(inputField$,
+      {_: {}
+      ,$class: p.$class
+      ,decoder: $Html$Events.targetValue
+      ,name: p.name
+      ,pattern: $Maybe.Nothing
+      ,placeholder: p.placeholder
+      ,required: p.required
+      ,type$: "text"
+      ,update: p.update},
+      _L.fromArray([$Html$Attributes.value(p.value)
+                   ,$Html$Attributes.autocomplete(p.autocomplete)]));
+   };
+   var inputMaybeText$ = function (p) {
+      return A2(inputField$,
+      {_: {}
+      ,$class: p.$class
+      ,decoder: $Html$Events$Extra.targetValueMaybe
+      ,name: p.name
+      ,pattern: $Maybe.Nothing
+      ,placeholder: p.placeholder
+      ,required: false
+      ,type$: "text"
+      ,update: p.update},
+      _L.fromArray([$Html$Attributes.value(A2($Maybe.withDefault,
+                   "",
+                   p.value))
+                   ,$Html$Attributes.autocomplete(p.autocomplete)]));
+   };
+   var inputFloat$ = function (p) {
+      return function () {
+         var filterJust = $List.filterMap($Basics.identity);
+         return inputField$({_: {}
+                            ,$class: p.$class
+                            ,decoder: function () {
+                               var _v1 = {ctor: "_Tuple2"
+                                         ,_0: p.min
+                                         ,_1: p.max};
+                               switch (_v1.ctor)
+                               {case "_Tuple2":
+                                  switch (_v1._0.ctor)
+                                    {case "Nothing":
+                                       switch (_v1._1.ctor)
+                                         {case "Nothing":
+                                            return $Html$Events$Extra.targetValueFloat;}
+                                         break;}
+                                    break;}
+                               return $Json$Decode.customDecoder($Html$Events$Extra.targetValueFloat)(function (v) {
+                                  return _U.cmp(v,
+                                  A2($Maybe.withDefault,
+                                  -1 / 0,
+                                  p.min)) < 0 || _U.cmp(v,
+                                  A2($Maybe.withDefault,
+                                  1 / 0,
+                                  p.max)) > 0 ? $Result.Err("out of bounds") : $Result.Ok(v);
+                               });
+                            }()
+                            ,name: p.name
+                            ,pattern: $Maybe.Nothing
+                            ,placeholder: p.placeholder
+                            ,required: true
+                            ,type$: "number"
+                            ,update: p.update})(A2($List._op["::"],
+         $Html$Attributes$Extra.valueAsFloat(p.value),
+         A2($List._op["::"],
+         A2($Html$Attributes.stringProperty,
+         "step",
+         $Maybe.withDefault("any")(A2($Maybe.map,
+         $Basics.toString,
+         p.step))),
+         filterJust(_L.fromArray([A2($Maybe.map,
+                                 function ($) {
+                                    return $Html$Attributes.min($Basics.toString($));
+                                 },
+                                 p.min)
+                                 ,A2($Maybe.map,
+                                 function ($) {
+                                    return $Html$Attributes.max($Basics.toString($));
+                                 },
+                                 p.max)])))));
+      }();
+   };
+   var inputMaybeFloat$ = function (p) {
+      return function () {
+         var filterJust = $List.filterMap($Basics.identity);
+         return inputField$({_: {}
+                            ,$class: p.$class
+                            ,decoder: function () {
+                               var _v6 = {ctor: "_Tuple2"
+                                         ,_0: p.min
+                                         ,_1: p.max};
+                               switch (_v6.ctor)
+                               {case "_Tuple2":
+                                  switch (_v6._0.ctor)
+                                    {case "Nothing":
+                                       switch (_v6._1.ctor)
+                                         {case "Nothing":
+                                            return $Html$Events$Extra.targetValueMaybeFloat;}
+                                         break;}
+                                    break;}
+                               return $Json$Decode.customDecoder($Html$Events$Extra.targetValueMaybeFloat)(function (mv) {
+                                  return function () {
+                                     switch (mv.ctor)
+                                     {case "Just":
+                                        return _U.cmp(mv._0,
+                                          A2($Maybe.withDefault,
+                                          -1 / 0,
+                                          p.min)) < 0 || _U.cmp(mv._0,
+                                          A2($Maybe.withDefault,
+                                          1 / 0,
+                                          p.max)) > 0 ? $Result.Err("out of bounds") : $Result.Ok(mv);
+                                        case "Nothing":
+                                        return $Result.Ok($Maybe.Nothing);}
+                                     _U.badCase($moduleName,
+                                     "between lines 1482 and 1487");
+                                  }();
+                               });
+                            }()
+                            ,name: p.name
+                            ,pattern: $Maybe.Nothing
+                            ,placeholder: p.placeholder
+                            ,required: false
+                            ,type$: "number"
+                            ,update: p.update})(A2($List._op["::"],
+         function () {
+            var _v4 = p.value;
+            switch (_v4.ctor)
+            {case "Just":
+               return $Html$Attributes$Extra.valueAsFloat(_v4._0);
+               case "Nothing":
+               return $Html$Attributes.value("");}
+            _U.badCase($moduleName,
+            "between lines 1488 and 1491");
+         }(),
+         A2($List._op["::"],
+         A2($Html$Attributes.stringProperty,
+         "step",
+         $Maybe.withDefault("any")(A2($Maybe.map,
+         $Basics.toString,
+         p.step))),
+         filterJust(_L.fromArray([A2($Maybe.map,
+                                 function ($) {
+                                    return $Html$Attributes.min($Basics.toString($));
+                                 },
+                                 p.min)
+                                 ,A2($Maybe.map,
+                                 function ($) {
+                                    return $Html$Attributes.max($Basics.toString($));
+                                 },
+                                 p.max)])))));
+      }();
+   };
+   var inputInt$ = function (p) {
+      return function () {
+         var filterJust = $List.filterMap($Basics.identity);
+         return inputField$({_: {}
+                            ,$class: p.$class
+                            ,decoder: function () {
+                               var _v11 = {ctor: "_Tuple2"
+                                          ,_0: p.min
+                                          ,_1: p.max};
+                               switch (_v11.ctor)
+                               {case "_Tuple2":
+                                  switch (_v11._0.ctor)
+                                    {case "Nothing":
+                                       switch (_v11._1.ctor)
+                                         {case "Nothing":
+                                            return $Html$Events$Extra.targetValueInt;}
+                                         break;}
+                                    break;}
+                               return $Json$Decode.customDecoder($Html$Events$Extra.targetValueInt)(function (v) {
+                                  return _U.cmp(v,
+                                  A2($Maybe.withDefault,
+                                  $Basics.floor(-1 / 0),
+                                  p.min)) < 0 || _U.cmp(v,
+                                  A2($Maybe.withDefault,
+                                  $Basics.ceiling(1 / 0),
+                                  p.max)) > 0 ? $Result.Err("out of bounds") : $Result.Ok(v);
+                               });
+                            }()
+                            ,name: p.name
+                            ,pattern: $Maybe.Nothing
+                            ,placeholder: p.placeholder
+                            ,required: true
+                            ,type$: "number"
+                            ,update: p.update})(A2($List._op["::"],
+         $Html$Attributes$Extra.valueAsInt(p.value),
+         filterJust(_L.fromArray([A2($Maybe.map,
+                                 function ($) {
+                                    return $Html$Attributes.min($Basics.toString($));
+                                 },
+                                 p.min)
+                                 ,A2($Maybe.map,
+                                 function ($) {
+                                    return $Html$Attributes.max($Basics.toString($));
+                                 },
+                                 p.max)
+                                 ,A2($Maybe.map,
+                                 function ($) {
+                                    return $Html$Attributes.stringProperty("step")($Basics.toString($));
+                                 },
+                                 p.step)]))));
+      }();
+   };
+   var inputMaybeInt$ = function (p) {
+      return function () {
+         var filterJust = $List.filterMap($Basics.identity);
+         return inputField$({_: {}
+                            ,$class: p.$class
+                            ,decoder: function () {
+                               var _v16 = {ctor: "_Tuple2"
+                                          ,_0: p.min
+                                          ,_1: p.max};
+                               switch (_v16.ctor)
+                               {case "_Tuple2":
+                                  switch (_v16._0.ctor)
+                                    {case "Nothing":
+                                       switch (_v16._1.ctor)
+                                         {case "Nothing":
+                                            return $Html$Events$Extra.targetValueMaybeInt;}
+                                         break;}
+                                    break;}
+                               return $Json$Decode.customDecoder($Html$Events$Extra.targetValueMaybeInt)(function (mv) {
+                                  return function () {
+                                     switch (mv.ctor)
+                                     {case "Just":
+                                        return _U.cmp(mv._0,
+                                          A2($Maybe.withDefault,
+                                          $Basics.floor(-1 / 0),
+                                          p.min)) < 0 || _U.cmp(mv._0,
+                                          A2($Maybe.withDefault,
+                                          $Basics.ceiling(1 / 0),
+                                          p.max)) > 0 ? $Result.Err("out of bounds") : $Result.Ok(mv);
+                                        case "Nothing":
+                                        return $Result.Ok($Maybe.Nothing);}
+                                     _U.badCase($moduleName,
+                                     "between lines 1541 and 1546");
+                                  }();
+                               });
+                            }()
+                            ,name: p.name
+                            ,pattern: $Maybe.Nothing
+                            ,placeholder: p.placeholder
+                            ,required: false
+                            ,type$: "number"
+                            ,update: p.update})(A2($List._op["::"],
+         function () {
+            var _v14 = p.value;
+            switch (_v14.ctor)
+            {case "Just":
+               return $Html$Attributes$Extra.valueAsInt(_v14._0);
+               case "Nothing":
+               return $Html$Attributes.value("");}
+            _U.badCase($moduleName,
+            "between lines 1547 and 1550");
+         }(),
+         filterJust(_L.fromArray([A2($Maybe.map,
+                                 function ($) {
+                                    return $Html$Attributes.min($Basics.toString($));
+                                 },
+                                 p.min)
+                                 ,A2($Maybe.map,
+                                 function ($) {
+                                    return $Html$Attributes.max($Basics.toString($));
+                                 },
+                                 p.max)
+                                 ,A2($Maybe.map,
+                                 function ($) {
+                                    return $Html$Attributes.stringProperty("step")($Basics.toString($));
+                                 },
+                                 p.step)]))));
+      }();
+   };
+   var inputUrl$ = function (p) {
+      return A2(inputField$,
+      {_: {}
+      ,$class: p.$class
+      ,decoder: $Html$Events.targetValue
+      ,name: p.name
+      ,pattern: $Maybe.Nothing
+      ,placeholder: p.placeholder
+      ,required: p.required
+      ,type$: "url"
+      ,update: p.update},
+      _L.fromArray([$Html$Attributes.value(p.value)
+                   ,$Html$Attributes.autocomplete(p.autocomplete)]));
+   };
+   var inputMaybeUrl$ = function (p) {
+      return A2(inputField$,
+      {_: {}
+      ,$class: p.$class
+      ,decoder: $Html$Events$Extra.targetValueMaybe
+      ,name: p.name
+      ,pattern: $Maybe.Nothing
+      ,placeholder: p.placeholder
+      ,required: false
+      ,type$: "url"
+      ,update: p.update},
+      _L.fromArray([$Html$Attributes.value(A2($Maybe.withDefault,
+                   "",
+                   p.value))
+                   ,$Html$Attributes.autocomplete(p.autocomplete)]));
+   };
+   var select$ = function (p) {
+      return function () {
+         var i$ = encodeId(p.name);
+         return $Html.select(_L.fromArray([class$(p.$class)
+                                          ,$Html$Attributes.id(i$)
+                                          ,$Html$Attributes.name(i$)
+                                          ,A2($Html$Shorthand$Event.onChange,
+                                          $Html$Events.targetValue,
+                                          p.update.onSelect)]));
+      }();
+   };
+   var output$ = function (p) {
+      return function () {
+         var i$ = encodeId(p.name);
+         return $Html.output(_L.fromArray([class$(p.$class)
+                                          ,$Html$Attributes.id(i$)
+                                          ,$Html$Attributes.name(i$)
+                                          ,$Html$Attributes.$for($String.join(" ")(A2($List.map,
+                                          encodeId,
+                                          p.$for)))]));
+      }();
+   };
+   var fieldUpdateFallbackFocusLost = function (handler) {
+      return function () {
+         var doErr = function (r) {
+            return function () {
+               switch (r.ctor)
+               {case "Err":
+                  return function () {
+                       var _v24 = A2($Json$Decode.decodeValue,
+                       $Html$Events.targetValue,
+                       r._0.event);
+                       switch (_v24.ctor)
+                       {case "Err":
+                          return $Maybe.Nothing;
+                          case "Ok":
+                          return $Maybe.Just(handler.onFallback(_v24._0));}
+                       _U.badCase($moduleName,
+                       "between lines 256 and 259");
+                    }();
+                  case "Ok":
+                  return $Maybe.Nothing;}
+               _U.badCase($moduleName,
+               "between lines 253 and 259");
+            }();
+         };
+         var doOk = function (r) {
+            return function () {
+               switch (r.ctor)
+               {case "Err":
+                  return $Maybe.Nothing;
+                  case "Ok":
+                  return $Maybe.Just(handler.onInput(r._0));}
+               _U.badCase($moduleName,
+               "between lines 250 and 253");
+            }();
+         };
+         return {_: {}
+                ,onEnter: $Maybe.Just(doErr)
+                ,onInput: $Maybe.Just(doOk)
+                ,onKeyboardLost: $Maybe.Just(doErr)};
+      }();
+   };
+   var fieldUpdate = {_: {}
+                     ,onEnter: $Maybe.Nothing
+                     ,onInput: $Maybe.Nothing
+                     ,onKeyboardLost: $Maybe.Nothing};
+   var fieldUpdateContinuous = function (handler) {
+      return function () {
+         var doOk = function (r) {
+            return function () {
+               switch (r.ctor)
+               {case "Err":
+                  return $Maybe.Nothing;
+                  case "Ok":
+                  return $Maybe.Just(handler.onInput(r._0));}
+               _U.badCase($moduleName,
+               "between lines 198 and 201");
+            }();
+         };
+         return _U.replace([["onInput"
+                            ,$Maybe.Just(doOk)]],
+         fieldUpdate);
+      }();
+   };
+   var fieldUpdateFocusLost = function (handler) {
+      return function () {
+         var doOk = function (r) {
+            return function () {
+               switch (r.ctor)
+               {case "Err":
+                  return $Maybe.Nothing;
+                  case "Ok":
+                  return $Maybe.Just(handler.onInput(r._0));}
+               _U.badCase($moduleName,
+               "between lines 211 and 214");
+            }();
+         };
+         return _U.replace([["onEnter"
+                            ,$Maybe.Just(doOk)]
+                           ,["onKeyboardLost"
+                            ,$Maybe.Just(doOk)]],
+         fieldUpdate);
+      }();
+   };
+   var fieldUpdateFallbackContinuous = function (handler) {
+      return function () {
+         var doOkErr = function (r) {
+            return function () {
+               switch (r.ctor)
+               {case "Err":
+                  return function () {
+                       var _v39 = A2($Json$Decode.decodeValue,
+                       $Html$Events.targetValue,
+                       r._0.event);
+                       switch (_v39.ctor)
+                       {case "Err":
+                          return $Maybe.Nothing;
+                          case "Ok":
+                          return $Maybe.Just(handler.onFallback(_v39._0));}
+                       _U.badCase($moduleName,
+                       "between lines 289 and 292");
+                    }();
+                  case "Ok":
+                  return $Maybe.Just(handler.onInput(r._0));}
+               _U.badCase($moduleName,
+               "between lines 286 and 292");
+            }();
+         };
+         return _U.replace([["onInput"
+                            ,$Maybe.Just(doOkErr)]],
+         fieldUpdate);
+      }();
+   };
+   var AutoDirection = {ctor: "AutoDirection"};
+   var RightToLeft = {ctor: "RightToLeft"};
+   var LeftToRight = {ctor: "LeftToRight"};
+   _elm.Html.Shorthand.values = {_op: _op
+                                ,LeftToRight: LeftToRight
+                                ,RightToLeft: RightToLeft
+                                ,AutoDirection: AutoDirection
+                                ,fieldUpdate: fieldUpdate
+                                ,fieldUpdateContinuous: fieldUpdateContinuous
+                                ,fieldUpdateFocusLost: fieldUpdateFocusLost
+                                ,fieldUpdateFallbackFocusLost: fieldUpdateFallbackFocusLost
+                                ,fieldUpdateFallbackContinuous: fieldUpdateFallbackContinuous
+                                ,encodeId: encodeId
+                                ,encodeClass: encodeClass
+                                ,id$: id$
+                                ,class$: class$
+                                ,body_: body_
+                                ,body$: body$
+                                ,section_: section_
+                                ,section$: section$
+                                ,nav_: nav_
+                                ,nav$: nav$
+                                ,article_: article_
+                                ,article$: article$
+                                ,aside$: aside$
+                                ,h1_: h1_
+                                ,h1$: h1$
+                                ,h2_: h2_
+                                ,h2$: h2$
+                                ,h3_: h3_
+                                ,h3$: h3$
+                                ,h4_: h4_
+                                ,h4$: h4$
+                                ,h5_: h5_
+                                ,h5$: h5$
+                                ,h6_: h6_
+                                ,h6$: h6$
+                                ,header_: header_
+                                ,header$: header$
+                                ,footer_: footer_
+                                ,footer$: footer$
+                                ,address_: address_
+                                ,address$: address$
+                                ,main_: main_
+                                ,p_: p_
+                                ,p$: p$
+                                ,hr_: hr_
+                                ,pre_: pre_
+                                ,pre$: pre$
+                                ,blockquote_: blockquote_
+                                ,blockquote$: blockquote$
+                                ,ol_: ol_
+                                ,ol$: ol$
+                                ,ul_: ul_
+                                ,ul$: ul$
+                                ,li_: li_
+                                ,li$: li$
+                                ,dl_: dl_
+                                ,dl$: dl$
+                                ,dt$: dt$
+                                ,dd_: dd_
+                                ,dd$: dd$
+                                ,figure$: figure$
+                                ,figcaption_: figcaption_
+                                ,figcaption$: figcaption$
+                                ,div_: div_
+                                ,div$: div$
+                                ,a_: a_
+                                ,a$: a$
+                                ,em_: em_
+                                ,em$: em$
+                                ,strong_: strong_
+                                ,strong$: strong$
+                                ,small_: small_
+                                ,small$: small$
+                                ,s_: s_
+                                ,s$: s$
+                                ,cite_: cite_
+                                ,cite$: cite$
+                                ,q_: q_
+                                ,q$: q$
+                                ,dfn$: dfn$
+                                ,abbr_: abbr_
+                                ,abbr$: abbr$
+                                ,code_: code_
+                                ,code$: code$
+                                ,var_: var_
+                                ,var$: var$
+                                ,samp_: samp_
+                                ,samp$: samp$
+                                ,kbd_: kbd_
+                                ,kbd$: kbd$
+                                ,sub_: sub_
+                                ,sub$: sub$
+                                ,sup_: sup_
+                                ,sup$: sup$
+                                ,i_: i_
+                                ,i$: i$
+                                ,b_: b_
+                                ,b$: b$
+                                ,u_: u_
+                                ,u$: u$
+                                ,mark_: mark_
+                                ,mark$: mark$
+                                ,ruby_: ruby_
+                                ,ruby$: ruby$
+                                ,rt_: rt_
+                                ,rt$: rt$
+                                ,rp_: rp_
+                                ,rp$: rp$
+                                ,bdi_: bdi_
+                                ,bdi$: bdi$
+                                ,bdo$: bdo$
+                                ,span_: span_
+                                ,span$: span$
+                                ,br$: br$
+                                ,wbr$: wbr$
+                                ,ins_: ins_
+                                ,ins$: ins$
+                                ,del_: del_
+                                ,del$: del$
+                                ,img$: img$
+                                ,img_: img_
+                                ,iframe$: iframe$
+                                ,embed$: embed$
+                                ,object$: object$
+                                ,param$: param$
+                                ,video_: video_
+                                ,video$: video$
+                                ,audio_: audio_
+                                ,audio$: audio$
+                                ,table_: table_
+                                ,table$: table$
+                                ,caption_: caption_
+                                ,caption$: caption$
+                                ,tbody_: tbody_
+                                ,tbody$: tbody$
+                                ,thead_: thead_
+                                ,thead$: thead$
+                                ,tfoot_: tfoot_
+                                ,tfoot$: tfoot$
+                                ,tr_: tr_
+                                ,tr$: tr$
+                                ,td_: td_
+                                ,td$: td$
+                                ,th_: th_
+                                ,th$: th$
+                                ,form$: form$
+                                ,fieldset_: fieldset_
+                                ,fieldset$: fieldset$
+                                ,legend_: legend_
+                                ,legend$: legend$
+                                ,label_: label_
+                                ,label$: label$
+                                ,inputField$: inputField$
+                                ,inputText$: inputText$
+                                ,inputMaybeText$: inputMaybeText$
+                                ,inputFloat$: inputFloat$
+                                ,inputMaybeFloat$: inputMaybeFloat$
+                                ,inputInt$: inputInt$
+                                ,inputMaybeInt$: inputMaybeInt$
+                                ,inputUrl$: inputUrl$
+                                ,inputMaybeUrl$: inputMaybeUrl$
+                                ,button_: button_
+                                ,button$: button$
+                                ,buttonLink_: buttonLink_
+                                ,buttonLink$: buttonLink$
+                                ,buttonSubmit_: buttonSubmit_
+                                ,buttonSubmit$: buttonSubmit$
+                                ,buttonReset_: buttonReset_
+                                ,buttonReset$: buttonReset$
+                                ,select$: select$
+                                ,option_: option_
+                                ,option$: option$
+                                ,output$: output$
+                                ,progress$: progress$
+                                ,meter$: meter$};
+   return _elm.Html.Shorthand.values;
+};

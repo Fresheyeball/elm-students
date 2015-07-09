@@ -1,0 +1,182 @@
+Elm.Html = Elm.Html || {};
+Elm.Html.Shorthand = Elm.Html.Shorthand || {};
+Elm.Html.Shorthand.Internal = Elm.Html.Shorthand.Internal || {};
+Elm.Html.Shorthand.Internal.make = function (_elm) {
+   "use strict";
+   _elm.Html = _elm.Html || {};
+   _elm.Html.Shorthand = _elm.Html.Shorthand || {};
+   _elm.Html.Shorthand.Internal = _elm.Html.Shorthand.Internal || {};
+   if (_elm.Html.Shorthand.Internal.values)
+   return _elm.Html.Shorthand.Internal.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   $moduleName = "Html.Shorthand.Internal",
+   $Basics = Elm.Basics.make(_elm),
+   $Char = Elm.Char.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Shorthand$Type = Elm.Html.Shorthand.Type.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $String = Elm.String.make(_elm);
+   var encodeClass = function () {
+      var isAlpha = function (c) {
+         return function () {
+            var cc = $Char.toCode($Char.toLower(c));
+            return _U.cmp(cc,
+            $Char.toCode(_U.chr("a"))) > -1 && _U.cmp(cc,
+            $Char.toCode(_U.chr("z"))) < 1;
+         }();
+      };
+      var startWithAlpha = function (s) {
+         return function () {
+            var _v0 = $String.uncons(s);
+            switch (_v0.ctor)
+            {case "Just":
+               switch (_v0._0.ctor)
+                 {case "_Tuple2":
+                    return $Basics.not(isAlpha(_v0._0._0)) ? A2($String.cons,
+                      _U.chr("x"),
+                      s) : s;}
+                 break;
+               case "Nothing": return s;}
+            _U.badCase($moduleName,
+            "between lines 53 and 56");
+         }();
+      };
+      var hu = _L.fromArray([_U.chr("-")
+                            ,_U.chr("_")]);
+      var isClassChar = function (c) {
+         return $Char.isDigit(c) || (isAlpha(c) || A2($List.member,
+         c,
+         hu));
+      };
+      var smartTrimLeft = function (s) {
+         return function () {
+            var _v4 = $String.uncons(s);
+            switch (_v4.ctor)
+            {case "Just":
+               switch (_v4._0.ctor)
+                 {case "_Tuple2":
+                    return A2($List.member,
+                      _v4._0._0,
+                      hu) ? _v4._0._1 : s;}
+                 break;
+               case "Nothing": return s;}
+            _U.badCase($moduleName,
+            "between lines 56 and 59");
+         }();
+      };
+      var smartTrimRight = function (s) {
+         return function () {
+            var _v8 = $String.uncons($String.reverse(s));
+            switch (_v8.ctor)
+            {case "Just":
+               switch (_v8._0.ctor)
+                 {case "_Tuple2":
+                    return A2($List.member,
+                      _v8._0._0,
+                      hu) ? $String.reverse(_v8._0._1) : s;}
+                 break;
+               case "Nothing": return s;}
+            _U.badCase($moduleName,
+            "between lines 59 and 62");
+         }();
+      };
+      var smartTrim = function ($) {
+         return smartTrimRight(smartTrimLeft($));
+      };
+      return function ($) {
+         return $String.join(" ")($List.map(function ($) {
+            return startWithAlpha(smartTrim($String.filter(isClassChar)($String.toLower($))));
+         })($String.words($)));
+      };
+   }();
+   var class$ = function ($) {
+      return $Html$Attributes.$class(encodeClass($));
+   };
+   var encodeId = function () {
+      var isAlpha = function (c) {
+         return function () {
+            var cc = $Char.toCode($Char.toLower(c));
+            return _U.cmp(cc,
+            $Char.toCode(_U.chr("a"))) > -1 && _U.cmp(cc,
+            $Char.toCode(_U.chr("z"))) < 1;
+         }();
+      };
+      var startWithAlpha = function (s) {
+         return function () {
+            var _v12 = $String.uncons(s);
+            switch (_v12.ctor)
+            {case "Just":
+               switch (_v12._0.ctor)
+                 {case "_Tuple2":
+                    return $Basics.not(isAlpha(_v12._0._0)) ? A2($String.cons,
+                      _U.chr("x"),
+                      s) : s;}
+                 break;
+               case "Nothing": return s;}
+            _U.badCase($moduleName,
+            "between lines 24 and 27");
+         }();
+      };
+      var hu = _L.fromArray([_U.chr("-")
+                            ,_U.chr("_")]);
+      var isIdChar = function (c) {
+         return $Char.isDigit(c) || (isAlpha(c) || A2($List.member,
+         c,
+         hu));
+      };
+      var smartTrimLeft = function (s) {
+         return function () {
+            var _v16 = $String.uncons(s);
+            switch (_v16.ctor)
+            {case "Just":
+               switch (_v16._0.ctor)
+                 {case "_Tuple2":
+                    return A2($List.member,
+                      _v16._0._0,
+                      hu) ? _v16._0._1 : s;}
+                 break;
+               case "Nothing": return s;}
+            _U.badCase($moduleName,
+            "between lines 27 and 30");
+         }();
+      };
+      var smartTrimRight = function (s) {
+         return function () {
+            var _v20 = $String.uncons($String.reverse(s));
+            switch (_v20.ctor)
+            {case "Just":
+               switch (_v20._0.ctor)
+                 {case "_Tuple2":
+                    return A2($List.member,
+                      _v20._0._0,
+                      hu) ? $String.reverse(_v20._0._1) : s;}
+                 break;
+               case "Nothing": return s;}
+            _U.badCase($moduleName,
+            "between lines 30 and 33");
+         }();
+      };
+      var smartTrim = function ($) {
+         return smartTrimRight(smartTrimLeft($));
+      };
+      return function ($) {
+         return startWithAlpha($String.join("-")($List.map(function ($) {
+            return smartTrim($String.filter(isIdChar)($String.toLower($)));
+         })($String.words($))));
+      };
+   }();
+   var id$ = function ($) {
+      return $Html$Attributes.id(encodeId($));
+   };
+   _elm.Html.Shorthand.Internal.values = {_op: _op
+                                         ,encodeId: encodeId
+                                         ,encodeClass: encodeClass
+                                         ,id$: id$
+                                         ,class$: class$};
+   return _elm.Html.Shorthand.Internal.values;
+};

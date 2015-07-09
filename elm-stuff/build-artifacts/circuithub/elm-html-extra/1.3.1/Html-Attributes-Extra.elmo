@@ -1,0 +1,61 @@
+Elm.Html = Elm.Html || {};
+Elm.Html.Attributes = Elm.Html.Attributes || {};
+Elm.Html.Attributes.Extra = Elm.Html.Attributes.Extra || {};
+Elm.Html.Attributes.Extra.make = function (_elm) {
+   "use strict";
+   _elm.Html = _elm.Html || {};
+   _elm.Html.Attributes = _elm.Html.Attributes || {};
+   _elm.Html.Attributes.Extra = _elm.Html.Attributes.Extra || {};
+   if (_elm.Html.Attributes.Extra.values)
+   return _elm.Html.Attributes.Extra.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   $moduleName = "Html.Attributes.Extra",
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Json$Encode = Elm.Json.Encode.make(_elm);
+   var optimum = $Html$Attributes.stringProperty("optimum");
+   var high = $Html$Attributes.stringProperty("high");
+   var low = $Html$Attributes.stringProperty("low");
+   var role = function (r) {
+      return A2($Html$Attributes.attribute,
+      "role",
+      r);
+   };
+   var intProperty = F2(function (name,
+   $int) {
+      return A2($Html$Attributes.property,
+      name,
+      $Json$Encode.$int($int));
+   });
+   var valueAsInt = function (value) {
+      return A2(intProperty,
+      "valueAsNumber",
+      value);
+   };
+   var floatProperty = F2(function (name,
+   $float) {
+      return A2($Html$Attributes.property,
+      name,
+      $Json$Encode.$float($float));
+   });
+   var valueAsFloat = function (value) {
+      return A2(floatProperty,
+      "valueAsNumber",
+      value);
+   };
+   var volume = floatProperty("volume");
+   _elm.Html.Attributes.Extra.values = {_op: _op
+                                       ,floatProperty: floatProperty
+                                       ,intProperty: intProperty
+                                       ,valueAsFloat: valueAsFloat
+                                       ,valueAsInt: valueAsInt
+                                       ,role: role
+                                       ,low: low
+                                       ,high: high
+                                       ,optimum: optimum
+                                       ,volume: volume};
+   return _elm.Html.Attributes.Extra.values;
+};

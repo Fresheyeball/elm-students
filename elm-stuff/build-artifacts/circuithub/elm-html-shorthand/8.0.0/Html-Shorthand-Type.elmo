@@ -1,0 +1,450 @@
+Elm.Html = Elm.Html || {};
+Elm.Html.Shorthand = Elm.Html.Shorthand || {};
+Elm.Html.Shorthand.Type = Elm.Html.Shorthand.Type || {};
+Elm.Html.Shorthand.Type.make = function (_elm) {
+   "use strict";
+   _elm.Html = _elm.Html || {};
+   _elm.Html.Shorthand = _elm.Html.Shorthand || {};
+   _elm.Html.Shorthand.Type = _elm.Html.Shorthand.Type || {};
+   if (_elm.Html.Shorthand.Type.values)
+   return _elm.Html.Shorthand.Type.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   $moduleName = "Html.Shorthand.Type",
+   $Json$Decode = Elm.Json.Decode.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var MeterParam = F7(function (a,
+   b,
+   c,
+   d,
+   e,
+   f,
+   g) {
+      return {_: {}
+             ,$class: a
+             ,high: f
+             ,low: e
+             ,max: d
+             ,min: c
+             ,optimum: g
+             ,value: b};
+   });
+   var ProgressParam = F3(function (a,
+   b,
+   c) {
+      return {_: {}
+             ,$class: a
+             ,max: c
+             ,value: b};
+   });
+   var OutputParam = F3(function (a,
+   b,
+   c) {
+      return {_: {}
+             ,$class: a
+             ,$for: c
+             ,name: b};
+   });
+   var OptionParam = F3(function (a,
+   b,
+   c) {
+      return {_: {}
+             ,label: a
+             ,selected: c
+             ,value: b};
+   });
+   var SelectParam = F3(function (a,
+   b,
+   c) {
+      return {_: {}
+             ,$class: a
+             ,name: b
+             ,update: c};
+   });
+   var ButtonParam = F2(function (a,
+   b) {
+      return {_: {}
+             ,$class: a
+             ,update: b};
+   });
+   var InputMaybeIntParam = F8(function (a,
+   b,
+   c,
+   d,
+   e,
+   f,
+   g,
+   h) {
+      return {_: {}
+             ,$class: a
+             ,max: f
+             ,min: e
+             ,name: b
+             ,placeholder: c
+             ,step: g
+             ,update: h
+             ,value: d};
+   });
+   var InputIntParam = F8(function (a,
+   b,
+   c,
+   d,
+   e,
+   f,
+   g,
+   h) {
+      return {_: {}
+             ,$class: a
+             ,max: f
+             ,min: e
+             ,name: b
+             ,placeholder: c
+             ,step: g
+             ,update: h
+             ,value: d};
+   });
+   var InputMaybeFloatParam = F8(function (a,
+   b,
+   c,
+   d,
+   e,
+   f,
+   g,
+   h) {
+      return {_: {}
+             ,$class: a
+             ,max: f
+             ,min: e
+             ,name: b
+             ,placeholder: c
+             ,step: g
+             ,update: h
+             ,value: d};
+   });
+   var InputFloatParam = F8(function (a,
+   b,
+   c,
+   d,
+   e,
+   f,
+   g,
+   h) {
+      return {_: {}
+             ,$class: a
+             ,max: f
+             ,min: e
+             ,name: b
+             ,placeholder: c
+             ,step: g
+             ,update: h
+             ,value: d};
+   });
+   var InputMaybeUrlParam = F6(function (a,
+   b,
+   c,
+   d,
+   e,
+   f) {
+      return {_: {}
+             ,$class: a
+             ,autocomplete: e
+             ,name: b
+             ,placeholder: c
+             ,update: f
+             ,value: d};
+   });
+   var InputUrlParam = F7(function (a,
+   b,
+   c,
+   d,
+   e,
+   f,
+   g) {
+      return {_: {}
+             ,$class: a
+             ,autocomplete: f
+             ,name: b
+             ,placeholder: c
+             ,required: e
+             ,update: g
+             ,value: d};
+   });
+   var InputMaybeTextParam = F6(function (a,
+   b,
+   c,
+   d,
+   e,
+   f) {
+      return {_: {}
+             ,$class: a
+             ,autocomplete: e
+             ,name: b
+             ,placeholder: c
+             ,update: f
+             ,value: d};
+   });
+   var InputTextParam = F7(function (a,
+   b,
+   c,
+   d,
+   e,
+   f,
+   g) {
+      return {_: {}
+             ,$class: a
+             ,autocomplete: f
+             ,name: b
+             ,placeholder: c
+             ,required: e
+             ,update: g
+             ,value: d};
+   });
+   var InputFieldParam = F8(function (a,
+   b,
+   c,
+   d,
+   e,
+   f,
+   g,
+   h) {
+      return {_: {}
+             ,$class: a
+             ,decoder: h
+             ,name: b
+             ,pattern: f
+             ,placeholder: c
+             ,required: g
+             ,type$: e
+             ,update: d};
+   });
+   var LabelParam = F2(function (a,
+   b) {
+      return {_: {}
+             ,$class: a
+             ,$for: b};
+   });
+   var FieldsetParam = F2(function (a,
+   b) {
+      return {_: {}
+             ,$class: a
+             ,disabled: b};
+   });
+   var FormParam = F3(function (a,
+   b,
+   c) {
+      return {_: {}
+             ,$class: a
+             ,novalidate: b
+             ,update: c};
+   });
+   var VideoParam = function (a) {
+      return function (b) {
+         return function (c) {
+            return function (d) {
+               return function (e) {
+                  return function (f) {
+                     return function (g) {
+                        return function (h) {
+                           return function (i) {
+                              return function (j) {
+                                 return function (k) {
+                                    return function (l) {
+                                       return {_: {}
+                                              ,$class: a
+                                              ,autoplay: g
+                                              ,controls: h
+                                              ,height: d
+                                              ,loop: i
+                                              ,poster: k
+                                              ,preload: j
+                                              ,src: b
+                                              ,videoHeight: e
+                                              ,videoWidth: f
+                                              ,volume: l
+                                              ,width: c};
+                                    };
+                                 };
+                              };
+                           };
+                        };
+                     };
+                  };
+               };
+            };
+         };
+      };
+   };
+   var MediaParam = F8(function (a,
+   b,
+   c,
+   d,
+   e,
+   f,
+   g,
+   h) {
+      return {_: {}
+             ,$class: a
+             ,autoplay: c
+             ,controls: d
+             ,loop: e
+             ,poster: g
+             ,preload: f
+             ,src: b
+             ,volume: h};
+   });
+   var ObjectParam = F7(function (a,
+   b,
+   c,
+   d,
+   e,
+   f,
+   g) {
+      return {_: {}
+             ,$class: a
+             ,data: c
+             ,height: f
+             ,name: b
+             ,type$: d
+             ,useMapName: e
+             ,width: g};
+   });
+   var EmbedParam = F7(function (a,
+   b,
+   c,
+   d,
+   e,
+   f,
+   g) {
+      return {_: {}
+             ,$class: a
+             ,height: f
+             ,id: b
+             ,src: c
+             ,type$: d
+             ,useMapName: e
+             ,width: g};
+   });
+   var IframeParam = F7(function (a,
+   b,
+   c,
+   d,
+   e,
+   f,
+   g) {
+      return {_: {}
+             ,$class: a
+             ,height: e
+             ,name: b
+             ,sandbox: f
+             ,seamless: g
+             ,src: c
+             ,width: d};
+   });
+   var ImgParam = F5(function (a,
+   b,
+   c,
+   d,
+   e) {
+      return {_: {}
+             ,$class: a
+             ,alt: e
+             ,height: d
+             ,src: b
+             ,width: c};
+   });
+   var ModParam = F3(function (a,
+   b,
+   c) {
+      return {_: {}
+             ,$class: a
+             ,cite: b
+             ,datetime: c};
+   });
+   var AnchorParam = F2(function (a,
+   b) {
+      return {_: {}
+             ,$class: a
+             ,href: b};
+   });
+   var ClassCiteParam = F2(function (a,
+   b) {
+      return {_: {}
+             ,$class: a
+             ,cite: b};
+   });
+   var ClassIdParam = F2(function (a,
+   b) {
+      return {_: {}
+             ,$class: a
+             ,id: b};
+   });
+   var ClassParam = function (a) {
+      return {_: {},$class: a};
+   };
+   var SelectUpdate = function (a) {
+      return {_: {},onSelect: a};
+   };
+   var ButtonUpdate = function (a) {
+      return {_: {},onClick: a};
+   };
+   var FieldUpdate = F3(function (a,
+   b,
+   c) {
+      return {_: {}
+             ,onEnter: b
+             ,onInput: a
+             ,onKeyboardLost: c};
+   });
+   var FormUpdate = F2(function (a,
+   b) {
+      return {_: {}
+             ,onEnter: b
+             ,onSubmit: a};
+   });
+   var EventDecodeError = F2(function (a,
+   b) {
+      return {_: {}
+             ,event: a
+             ,reason: b};
+   });
+   _elm.Html.Shorthand.Type.values = {_op: _op
+                                     ,EventDecodeError: EventDecodeError
+                                     ,FormUpdate: FormUpdate
+                                     ,FieldUpdate: FieldUpdate
+                                     ,ButtonUpdate: ButtonUpdate
+                                     ,SelectUpdate: SelectUpdate
+                                     ,ClassParam: ClassParam
+                                     ,ClassIdParam: ClassIdParam
+                                     ,ClassCiteParam: ClassCiteParam
+                                     ,AnchorParam: AnchorParam
+                                     ,ModParam: ModParam
+                                     ,ImgParam: ImgParam
+                                     ,IframeParam: IframeParam
+                                     ,EmbedParam: EmbedParam
+                                     ,ObjectParam: ObjectParam
+                                     ,MediaParam: MediaParam
+                                     ,VideoParam: VideoParam
+                                     ,FormParam: FormParam
+                                     ,FieldsetParam: FieldsetParam
+                                     ,LabelParam: LabelParam
+                                     ,InputFieldParam: InputFieldParam
+                                     ,InputTextParam: InputTextParam
+                                     ,InputMaybeTextParam: InputMaybeTextParam
+                                     ,InputUrlParam: InputUrlParam
+                                     ,InputMaybeUrlParam: InputMaybeUrlParam
+                                     ,InputFloatParam: InputFloatParam
+                                     ,InputMaybeFloatParam: InputMaybeFloatParam
+                                     ,InputIntParam: InputIntParam
+                                     ,InputMaybeIntParam: InputMaybeIntParam
+                                     ,ButtonParam: ButtonParam
+                                     ,SelectParam: SelectParam
+                                     ,OptionParam: OptionParam
+                                     ,OutputParam: OutputParam
+                                     ,ProgressParam: ProgressParam
+                                     ,MeterParam: MeterParam};
+   return _elm.Html.Shorthand.Type.values;
+};

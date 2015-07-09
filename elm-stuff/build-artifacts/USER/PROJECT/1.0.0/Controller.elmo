@@ -1,0 +1,33 @@
+Elm.Controller = Elm.Controller || {};
+Elm.Controller.make = function (_elm) {
+   "use strict";
+   _elm.Controller = _elm.Controller || {};
+   if (_elm.Controller.values)
+   return _elm.Controller.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   $moduleName = "Controller",
+   $Basics = Elm.Basics.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Model = Elm.Model.make(_elm);
+   var control = F2(function (input,
+   target) {
+      return function () {
+         switch (input.ctor)
+         {case "Delete":
+            return A2($List.filter,
+              F2(function (x,y) {
+                 return !_U.eq(x,y);
+              })(input._0),
+              target);
+            case "Empty": return target;}
+         _U.badCase($moduleName,
+         "between lines 7 and 9");
+      }();
+   });
+   _elm.Controller.values = {_op: _op
+                            ,control: control};
+   return _elm.Controller.values;
+};

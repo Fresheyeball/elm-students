@@ -1,0 +1,41 @@
+Elm.Main = Elm.Main || {};
+Elm.Main.make = function (_elm) {
+   "use strict";
+   _elm.Main = _elm.Main || {};
+   if (_elm.Main.values)
+   return _elm.Main.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   $moduleName = "Main",
+   $Basics = Elm.Basics.make(_elm),
+   $Controller = Elm.Controller.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Shorthand = Elm.Html.Shorthand.make(_elm),
+   $Model = Elm.Model.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $View = Elm.View.make(_elm);
+   var input = $Signal.mailbox($Model.Empty);
+   var students = A3($Signal.foldp,
+   $Controller.control,
+   $Model.dummy,
+   input.signal);
+   var main = function () {
+      var render = function (s) {
+         return $Html$Shorthand.div_(A2($Basics._op["++"],
+         $View.semantic$ui,
+         _L.fromArray([A2($View.view,
+         s,
+         input.address)])));
+      };
+      return A2($Signal._op["<~"],
+      render,
+      students);
+   }();
+   _elm.Main.values = {_op: _op
+                      ,input: input
+                      ,students: students
+                      ,main: main};
+   return _elm.Main.values;
+};

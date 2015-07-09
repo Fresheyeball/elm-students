@@ -1,0 +1,92 @@
+Elm.Html = Elm.Html || {};
+Elm.Html.Shorthand = Elm.Html.Shorthand || {};
+Elm.Html.Shorthand.Event = Elm.Html.Shorthand.Event || {};
+Elm.Html.Shorthand.Event.make = function (_elm) {
+   "use strict";
+   _elm.Html = _elm.Html || {};
+   _elm.Html.Shorthand = _elm.Html.Shorthand || {};
+   _elm.Html.Shorthand.Event = _elm.Html.Shorthand.Event || {};
+   if (_elm.Html.Shorthand.Event.values)
+   return _elm.Html.Shorthand.Event.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   $moduleName = "Html.Shorthand.Event",
+   $Basics = Elm.Basics.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
+   $Html$Shorthand$Type = Elm.Html.Shorthand.Type.make(_elm),
+   $Json$Decode = Elm.Json.Decode.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var messageDecoder = F2(function (dec,
+   f) {
+      return $Json$Decode.customDecoder($Json$Decode.value)(function (event) {
+         return function () {
+            var r = A2($Json$Decode.decodeValue,
+            dec,
+            event);
+            var r$ = A2($Result.formatError,
+            $Html$Shorthand$Type.EventDecodeError(event),
+            r);
+            return function () {
+               var _v0 = {ctor: "_Tuple2"
+                         ,_0: f(r$)
+                         ,_1: r};
+               switch (_v0.ctor)
+               {case "_Tuple2":
+                  switch (_v0._0.ctor)
+                    {case "Just":
+                       return $Result.Ok(_v0._0._0);
+                       case "Nothing":
+                       switch (_v0._1.ctor)
+                         {case "Err":
+                            return $Result.Err(_v0._1._0);
+                            case "Ok":
+                            return $Result.Err("no message in response to event");}
+                         break;}
+                    break;}
+               _U.badCase($moduleName,
+               "between lines 104 and 107");
+            }();
+         }();
+      });
+   });
+   var onMouseLost = $Html$Events.on("mouseleave");
+   var onKeyboardLost = $Html$Events.on("blur");
+   var onEnter = F2(function (dec,
+   f) {
+      return A3($Html$Events.on,
+      "keydown",
+      $Json$Decode.customDecoder(A3($Json$Decode.object2,
+      F2(function (v0,v1) {
+         return {ctor: "_Tuple2"
+                ,_0: v0
+                ,_1: v1};
+      }),
+      $Html$Events.keyCode,
+      dec))(function (_v6) {
+         return function () {
+            switch (_v6.ctor)
+            {case "_Tuple2":
+               return _U.eq(_v6._0,
+                 13) ? $Result.Ok(_v6._1) : $Result.Err("expected key code 13");}
+            _U.badCase($moduleName,
+            "on line 37, column 72 to 126");
+         }();
+      }),
+      f);
+   });
+   var onChange = $Html$Events.on("change");
+   var onInput = $Html$Events.on("input");
+   _elm.Html.Shorthand.Event.values = {_op: _op
+                                      ,onInput: onInput
+                                      ,onChange: onChange
+                                      ,onEnter: onEnter
+                                      ,onKeyboardLost: onKeyboardLost
+                                      ,onMouseLost: onMouseLost
+                                      ,messageDecoder: messageDecoder};
+   return _elm.Html.Shorthand.Event.values;
+};
