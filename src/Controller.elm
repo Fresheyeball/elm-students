@@ -1,9 +1,24 @@
 module Controller where
 
-import Model exposing (..)
+import Json.Decode exposing (..)
+import Result      exposing (..)
+import Signal      exposing (..)
+
+import Model       exposing (..)
+
+new : Signal (Result String Student)
+new = let
+  g name score =
+    case decodeString int score of
+      Ok score' -> Ok { name = name, score = score' }
+      Err s     -> Err s
+  in g <~ newName.signal ~ newScore.signal
+     |> sampleOn submit.signal 
 
 control : Input -> Students -> Students
 control input target =
   case input of
-    Delete corpse -> List.filter ((/=) corpse) target
-    Empty -> target
+    Create baby       -> baby::target
+    Update (from, to) -> to::control (Delete from) target
+    Delete corpse     -> List.filter ((/=) corpse) target
+    Empty             -> target

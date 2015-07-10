@@ -1,7 +1,7 @@
 module View where
 
-import Html            exposing (Html, node, table, text, button, input, label)
-import Html.Events     exposing (onClick)
+import Html            exposing (Html, node, table, text, button, label, div)
+import Html.Events     exposing (onClick, on, targetValue)
 import Html.Shorthand  exposing (thead_, tbody_, tr_, th_, td_, div_)
 import Html.Attributes exposing (href, rel, class)
 import Signal          exposing (Address)
@@ -23,15 +23,15 @@ semantic'ui = let
      , semantic "button"
      , semantic "input" ]
 
-view : Students -> Address Input -> Html
-view students address = let
+studentTable : Students -> Html
+studentTable students = let
   row : Student -> Html
   row student = tr_
     [ th_ [ text           student.name   ]
     , th_ [ text (toString student.score) ]
     , th_
       [ button [ class "ui button"
-               , onClick address (Delete student) ]
+               , onClick input.address (Delete student) ]
         [ text "Delete" ] ] ]
 
   title : Html
@@ -46,9 +46,19 @@ view students address = let
     , tbody_ (List.map row students) ]
 
 new : Html
-new = div_
-  [ label [] [ text "Name" ] ]
+new = let
+  onInput a = on "input" targetValue (Signal.message a)
 
-layers : Students -> Address Input -> List Html
-layers students address =
-  [ view students address ]
+  in
+  div [ class "ui form" ]
+  [ label [] [ text "Name" ]
+  , Html.input [ onInput newName.address ] []
+  , label [] [ text "Score" ]
+  , Html.input [ onInput newScore.address ] []
+  , button [ onClick submit.address () ]
+    [ text "Add Student" ] ]
+
+view : Students -> List Html
+view students =
+  [ studentTable students
+  , new ]
