@@ -6,14 +6,14 @@ import Signal      exposing (..)
 
 import Model       exposing (..)
 
-new : Signal (Result String Student)
+new : Signal Input
 new = let
   g name score =
     case decodeString int score of
-      Ok score' -> Ok { name = name, score = score' }
-      Err s     -> Err s
+      Ok score' -> Create { name = name, score = score' }
+      _         -> Empty
   in g <~ newName.signal ~ newScore.signal
-     |> sampleOn submit.signal 
+     |> sampleOn submit.signal
 
 control : Input -> Students -> Students
 control input target =

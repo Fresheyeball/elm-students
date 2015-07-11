@@ -2,8 +2,8 @@ module View where
 
 import Html            exposing (Html, node, table, text, button, label, div)
 import Html.Events     exposing (onClick, on, targetValue)
-import Html.Shorthand  exposing (thead_, tbody_, tr_, th_, td_, div_)
-import Html.Attributes exposing (href, rel, class)
+import Html.Shorthand  exposing (thead_, tbody_, tr_, th_, td_, div_, br')
+import Html.Attributes exposing (href, rel, class, type', value)
 import Signal          exposing (Address)
 import List
 
@@ -45,20 +45,24 @@ studentTable students = let
     [ thead_ [ title ]
     , tbody_ (List.map row students) ]
 
-new : Html
-new = let
+new : String -> String -> Html
+new name score = let
   onInput a = on "input" targetValue (Signal.message a)
-
   in
   div [ class "ui form" ]
   [ label [] [ text "Name" ]
-  , Html.input [ onInput newName.address ] []
+  , Html.input [ onInput newName.address
+               , value name ] []
+  , br'
   , label [] [ text "Score" ]
-  , Html.input [ onInput newScore.address ] []
+  , Html.input [ onInput newScore.address
+               , type' "number"
+               , value score ] []
+  , br'
   , button [ onClick submit.address () ]
     [ text "Add Student" ] ]
 
-view : Students -> List Html
-view students =
+view : Students -> String -> String -> List Html
+view students name score =
   [ studentTable students
-  , new ]
+  , new name score ]
