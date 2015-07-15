@@ -62,11 +62,14 @@ studentTable students = let
   score : Int -> Student -> Html
   score index student = let
     g s = { student | score <-
-      let s' = s |> String.toList >> dropWhile ((==) '0') >> String.fromList
+      let s' = s
+        |> String.toList
+        >> dropWhile ((==) '0')
+        >> String.fromList
       in case decodeString int s' of
         Ok i  -> i
         Err _ -> 0 }
-    in field (toString << .score) g index student ""
+    in field (toString << .score) g index student "Enter student score"
 
   failing : Student -> List Html.Attribute
   failing {score, name} =
@@ -77,7 +80,8 @@ studentTable students = let
   row : Int -> Student -> Html
   row index student = tr (failing student)
     [ td_ [ name  index student ]
-    , td_ [ score index student ]
+    , td [ class "collapsing" ]
+      [ score index student ]
     , td [ class "collapsing" ]
       [ button [ class "ui button"
                , onClick (.address input) (Delete index) ]
@@ -99,7 +103,8 @@ minMaxAvg : List Student -> Html
 minMaxAvg students = let
   (min', max', avg') = getMetrics students
   (#>) label x =
-    div [ class "ui label" ]
+    div [ class "ui label"
+        , style [("width", "60px")] ]
     [ text label
     , div [ class "detail" ]
       [ text <| toString x ] ]
