@@ -1,24 +1,23 @@
 module Controller where
 
-import Json.Decode exposing (..)
 import Result      exposing (..)
 import Signal      exposing (..)
+import Debug
 
 import Model       exposing (..)
 
-new : Signal Input
-new = let
-  g name score =
-    case decodeString int score of
-      Ok score' -> Create { name = name, score = score' }
-      _         -> Empty
-  in g <~ newName.signal ~ newScore.signal
-     |> sampleOn submit.signal
-
-control : Input -> Students -> Students
-control input target =
-  case input of
-    Create baby       -> baby::target
-    Update (from, to) -> to::control (Delete from) target
-    Delete corpse     -> List.filter ((/=) corpse) target
-    Empty             -> target
+control : Input -> State -> State
+control input state = let
+  (**) : Int -> List Student -> State
+  (**) i x = { state | list <-
+    List.take  i      (.list state) ++ x ++
+    List.drop (i + 1) (.list state) }
+  in case Debug.watch "input" input of
+    Create            ->
+      { list      = .list state ++ [ empty ]
+      , valid     = "" }
+    Update (from, to) ->
+      from ** [ { to | score <- to |> .score >> clamp 0 100 } ]
+    Delete corpse     -> corpse ** []
+    Invalid error     -> { state | valid <- error }
+    Empty             -> state

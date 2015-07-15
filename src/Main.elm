@@ -1,16 +1,20 @@
 module Main where
 
-import Html            exposing (Html)
-import Html.Shorthand  exposing (div_)
+import Html            exposing (Html, div)
+import Html.Attributes exposing (class)
 import Signal          exposing (..)
+import Task            exposing (Task)
+import Keyboard
+import Debug
 
-import Model           exposing (input, dummy, newName, newScore)
-import View            exposing (semantic'ui, view)
-import Controller      exposing (control, new)
+import Model           exposing (..)
+import View            exposing (view, createKey)
+import Controller      exposing (control)
+
+-- port run : Signal (Task x ())
+-- port run = createKey
 
 main : Signal Html
 main = let
-  render s n s' = div_ <| semantic'ui ++ view s n s'
-  in render <~ foldp control dummy (new `merge` input.signal)
-             ~ newName.signal
-             ~ newScore.signal
+  render state = div [ class "ui text container" ] (view (Debug.watch "state" state))
+  in render <~ foldp control dummy input.signal

@@ -6,32 +6,39 @@ type alias Student =
   { name  : String
   , score : Int }
 
-type alias Students =
-  List Student
+empty : Student
+empty =
+  { name  = ""
+  , score = 0 }
 
 type Input
-  = Create Student
-  | Update (Student, Student)
-  | Delete Student
+  = Update (Int, Student)
+  | Invalid String
+  | Delete Int
+  | Create
   | Empty
 
-dummy : Students
+type alias State =
+  { list     : List Student
+  , valid    : String }
+
+dummy : State
 dummy =
-  [ { name = "Jack", score = 96 }
-  , { name = "Jill", score = 63 } ]
+  { list  = [ { name = "", score = 0 } ]
+  , valid = "" }
 
 input : Mailbox Input
 input =
   mailbox Empty
 
-newName : Mailbox String
-newName =
-  mailbox ""
-
-newScore : Mailbox String
-newScore =
-  mailbox ""
-
-submit : Mailbox ()
-submit =
-  mailbox ()
+getMetrics : List Student -> (Int, Int, Int)
+getMetrics students = case students of
+  [] -> (0, 0, 0)
+  _  -> let
+    scores = List.map .score students
+    min'   = List.foldr min 100   scores
+    max'   = List.foldr max 0     scores
+    avg'   = toFloat (List.sum    scores)
+           / toFloat (List.length scores)
+           |> round
+    in (min', max', avg')
