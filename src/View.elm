@@ -1,9 +1,9 @@
 module View where
 
-import Html            exposing (Html, node, table, text, button, label, div, th, tr, td, form)
-import Html.Events     exposing (onClick, on, targetValue)
-import Html.Shorthand  exposing (thead_, tbody_, tfoot_, tr_, th_, td_, div_, br')
-import Html.Attributes exposing (href, rel, class, type', value, style, colspan, placeholder)
+import Html            exposing (..)
+import Html.Events     exposing (..)
+import Html.Shorthand  exposing (..)
+import Html.Attributes exposing (..)
 import Signal          exposing (Address)
 import List.Extra      exposing (dropWhile)
 import Json.Decode     exposing (decodeString, int)
@@ -18,10 +18,11 @@ import Model exposing (..)
 createKey : Signal (Task x ())
 createKey = let
   create : Task x ()
-  create = Signal.send (.address input) Create
-  g : Bool -> Maybe (Task x ())
-  g b = if b then Just create else Nothing
-  in Signal.filterMap g create Keyboard.enter
+  create = Signal.send (.address Model.input) Create
+  in Signal.filterMap
+    (\b -> if b then Just create else Nothing)
+    create
+    Keyboard.enter
 
 linkCSS : String -> Html
 linkCSS url = node "link"
@@ -48,10 +49,11 @@ studentTable students = let
   field l f index student placeholder' = let
     message s =
       Signal.message
-      (.address input)
+      (.address Model.input)
       (Update (index, f s) )
-    in div [ class "ui input fluid" ]
+    in div [ class "ui big input fluid" ]
       [ Html.input [ on "input" targetValue message
+                   , autofocus (index == 0)
                    , placeholder placeholder'
                    , value (l student) ] [] ]
 
@@ -83,8 +85,8 @@ studentTable students = let
     , td [ class "collapsing" ]
       [ score index student ]
     , td [ class "collapsing" ]
-      [ button [ class "ui button"
-               , onClick (.address input) (Delete index) ]
+      [ button [ class "ui button tiny"
+               , onClick (.address Model.input) (Delete index) ]
         [ text "Delete" ] ] ]
 
   title : Html
@@ -97,26 +99,33 @@ studentTable students = let
   table [ class "ui celled table" ]
     [ thead_ [ title ]
     , tbody_ (List.indexedMap row students)
-    , tfoot_ [ tr_ [ th [ colspan 3 ] [ create, minMaxAvg students ] ] ] ]
+    , tfoot_ [ tr_ [ th [ colspan 3 ]
+                     [ create, minMaxAvg students ] ] ] ]
 
-minMaxAvg : List Student -> Html
+minMaxAvg : State -> Html
 minMaxAvg students = let
-  (min', max', avg') = getMetrics students
-  (#>) label x =
+  (min', max', avg') = metrics students
+
+  style' k v = style [(k, v)]
+
+  label s x =
     div [ class "ui label"
-        , style [("width", "60px")] ]
-    [ text label
+        , style' "width" "60px" ]
+    [ text s
     , div [ class "detail" ]
       [ text <| toString x ] ]
-  in div [ style [("float", "right")] ]
-    [ "Min" #> min', "Max" #> max', "Avg" #> avg' ]
+
+  in div [ style' "float" "right" ]
+    [ label "Min" min'
+    , label "Max" max'
+    , label "Avg" avg' ]
 
 create : Html
 create =
-  button [ class "ui button"
-         , onClick input.address Create ]
-  [ text "Add" ]
+  button [ class "ui button primary tiny"
+         , onClick (.address Model.input) Create ]
+  [ text "Add Student" ]
 
 view : State -> List Html
-view state = semantic'ui ++
-  [ studentTable (.list state) ]
+view state =
+  semantic'ui ++ [ studentTable state ]

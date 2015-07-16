@@ -13,26 +13,22 @@ empty =
 
 type Input
   = Update (Int, Student)
-  | Invalid String
   | Delete Int
   | Create
   | Empty
 
 type alias State =
-  { list     : List Student
-  , valid    : String }
+  List Student
 
-dummy : State
-dummy =
-  { list  = [ { name = "", score = 0 } ]
-  , valid = "" }
+initial : State
+initial = []
 
 input : Mailbox Input
 input =
   mailbox Empty
 
-getMetrics : List Student -> (Int, Int, Int)
-getMetrics students = case students of
+metrics : State -> (Int, Int, Int)
+metrics students = case students of
   [] -> (0, 0, 0)
   _  -> let
     scores = List.map .score students

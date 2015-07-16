@@ -8,16 +8,12 @@ import Model       exposing (..)
 
 control : Input -> State -> State
 control input state = let
-  (**) : Int -> List Student -> State
-  (**) i x = { state | list <-
-    List.take  i      (.list state) ++ x ++
-    List.drop (i + 1) (.list state) }
+  updateAt : Int -> State-> State
+  updateAt i x =
+    List.take i state ++ x ++ List.drop (i + 1) state
   in case Debug.watch "input" input of
-    Create            ->
-      { list      = .list state ++ [ empty ]
-      , valid     = "" }
+    Create            -> state ++ [ empty ]
     Update (from, to) ->
-      from ** [ { to | score <- to |> .score >> clamp 0 100 } ]
-    Delete corpse     -> corpse ** []
-    Invalid error     -> { state | valid <- error }
+      updateAt from [ { to | score <- to |> .score >> clamp 0 100 } ]
+    Delete corpse     -> updateAt corpse []
     Empty             -> state

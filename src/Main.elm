@@ -4,7 +4,6 @@ import Html            exposing (Html, div)
 import Html.Attributes exposing (class)
 import Signal          exposing (..)
 import Task            exposing (Task)
-import Keyboard
 import Debug
 
 import Model           exposing (..)
@@ -17,4 +16,4 @@ import Controller      exposing (control)
 main : Signal Html
 main = let
   render state = div [ class "ui text container" ] (view (Debug.watch "state" state))
-  in render <~ foldp control dummy input.signal
+  in render <~ foldp control initial (.signal input)
