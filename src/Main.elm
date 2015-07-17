@@ -10,10 +10,13 @@ import Model           exposing (..)
 import View            exposing (view, createKey)
 import Controller      exposing (control)
 
--- port run : Signal (Task x ())
--- port run = createKey
+import Test
+
+port run : Signal (Task x ())
+port run = createKey
 
 main : Signal Html
 main = let
-  render state = div [ class "ui text container" ] (view (Debug.watch "state" state))
+  render state = div [ class "ui text container" ]
+    (view (Debug.watch "state" state) ++ Test.test)
   in render <~ foldp control initial (.signal input)
