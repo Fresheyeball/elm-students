@@ -12,8 +12,8 @@ import Controller      exposing (control)
 
 import Test
 
-port run : Signal (Task x ())
-port run = createKey
+-- port run : Signal (Task x ())
+-- port run = createKey
 
 main : Signal Html
 main = let

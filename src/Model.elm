@@ -1,10 +1,14 @@
 module Model where
 
 import Signal exposing (Mailbox, mailbox)
+import List exposing (map, foldr)
 
 type alias Student =
   { name  : String
   , score : Int }
+
+setScore : (Int -> Int) -> Student -> Student
+setScore f ({score} as student) = { student | score <- f score }
 
 empty : Student
 empty =
@@ -31,9 +35,9 @@ metrics : State -> (Int, Int, Int)
 metrics students = case students of
   [] -> (0, 0, 0)
   _  -> let
-    scores = List.map .score students
-    min'   = List.foldr min 100   scores
-    max'   = List.foldr max 0     scores
+    scores = map .score students
+    min'   = foldr min 100   scores
+    max'   = foldr max 0     scores
     avg'   = toFloat (List.sum    scores)
            / toFloat (List.length scores)
            |> round

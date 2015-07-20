@@ -1,9 +1,11 @@
 module Test where
 
 import Shrink
+import List
 import Html as H
 import Html.Attributes as A
 import Random.Extra as Random
+import Debug
 
 import Model       exposing (..)
 import Controller  exposing (..)
@@ -58,6 +60,43 @@ deleteDecreasesLength = let
   in claim "Delete Decreases Length"
     `that` delete `is` oneLess `for` state
 
+updateClampsScore : Claim
+updateClampsScore = let
+  isClamped {score} = if | score < 0   -> False
+                         | score > 100 -> False
+                         | otherwise   -> True
+
+  clean             = List.map << setScore <| clamp 0 100
+  exaggerate        = setScore << (*) <| 1000000
+
+  proof (i, s') =
+    List.all isClamped
+    << control (Update (i, exaggerate s')) << clean
+
+  in claim "Score is clamped"
+    `that` uncurry proof
+    `is` always True `for` tuple (tuple (int, student), state)
+
+checkControl = suite "Controller"
+  [ createAndDelete
+  , emptyDoesNothing
+  , createIncreasesLength
+  , deleteDecreasesLength
+  , updateClampsScore ]
+
+
+checkMetrics = suite "Metrics"
+  [ minClamped ]
+
+getMin (min, _, _) = min
+getMax (_, max, _) = max
+getAvg (_, _, avg) = avg
+
+minClamped = claim "Min is clamped"
+  `that` (not << (<) 0 << Debug.watch "min" << (getMin << metrics))
+  `is` always True
+  `for` state
+
 pure x = [x]
 
 test : List H.Html
@@ -65,9 +104,7 @@ test = let
   details =
     pure << H.details [ A.style [ ("overflow", "hidden") ] ]
          << (::) (H.summary [] [ H.text "Tests" ])
-         << pure << display << quickCheck << suite "Controller"
+         << pure << display << quickCheck << suite "Students"
   in details
-    [ createAndDelete
-    , emptyDoesNothing
-    , createIncreasesLength
-    , deleteDecreasesLength ]
+    [ checkControl
+    , checkMetrics ]
