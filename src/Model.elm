@@ -1,7 +1,7 @@
 module Model where
 
 import Signal exposing (Mailbox, mailbox)
-import List exposing (map, foldr)
+import List exposing (map, foldr, sum, length)
 
 type alias Student =
   { name  : String
@@ -38,7 +38,7 @@ metrics students = case students of
     scores = map .score students
     min'   = foldr min 100   scores
     max'   = foldr max 0     scores
-    avg'   = toFloat (List.sum    scores)
-           / toFloat (List.length scores)
+    avg'   = toFloat (sum    scores)
+           / toFloat (length scores)
            |> round
     in (min', max', avg')

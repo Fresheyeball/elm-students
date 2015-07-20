@@ -48,7 +48,7 @@ emptyDoesNothing =
 
 createIncreasesLength : Claim
 createIncreasesLength =
-  claim "Create Increases Length"
+  claim "Create increments length"
     `that` (control Create >> List.length)
     `is` (List.length >> ((+) 1)) `for` state
 
@@ -57,8 +57,18 @@ deleteDecreasesLength = let
   noLess x = if x < 0 then 0 else x
   delete = control (Delete 0) >> List.length >> noLess
   oneLess = List.length >> (flip (-) 1) >> noLess
-  in claim "Delete Decreases Length"
+  in claim "Delete decrements length"
     `that` delete `is` oneLess `for` state
+
+deleteRemovesItemAtIndex : Claim
+deleteRemovesItemAtIndex = let
+  sanitize (i, s) = (clamp 0 (List.length s - 1) i, s)
+  match i i' x = if i == i' then Nothing else Just x
+  proof = (<<) (List.filterMap identity) << List.indexedMap << match
+  in claim "Delete removes item at index"
+  `that` (uncurry (control << Delete) << sanitize)
+  `is`   (uncurry proof << sanitize)
+  `for` tuple (int, state)
 
 updateClampsScore : Claim
 updateClampsScore = let
@@ -75,27 +85,88 @@ updateClampsScore = let
 
   in claim "Score is clamped"
     `that` uncurry proof
-    `is` always True `for` tuple (tuple (int, student), state)
+    `is` always True
+    `for` tuple (tuple (int, student), state)
+
+updateChangesItemAtIndex : Claim
+updateChangesItemAtIndex = let
+  proof (i, s) state = case state of
+    [] -> True
+    _ -> let
+      effected = control (Update (i, s)) state
+      changed i' s' =
+        if i == i' then s' == s else True
+      in List.all identity (List.indexedMap changed state)
+  in claim "Update changes item at index, or no op"
+  `that` uncurry proof
+  `is` always True
+  `for` tuple (tuple (int, student), state)
 
 checkControl = suite "Controller"
   [ createAndDelete
   , emptyDoesNothing
   , createIncreasesLength
   , deleteDecreasesLength
+  , deleteRemovesItemAtIndex
+  , updateChangesItemAtIndex
   , updateClampsScore ]
-
-
-checkMetrics = suite "Metrics"
-  [ minClamped ]
 
 getMin (min, _, _) = min
 getMax (_, max, _) = max
 getAvg (_, _, avg) = avg
 
-minClamped = claim "Min is clamped"
-  `that` (not << (<) 0 << Debug.watch "min" << (getMin << metrics))
-  `is` always True
-  `for` state
+(<$>) = List.map
+
+minIsLowest = let
+  lowest s =
+    case List.minimum <| List.map .score s of
+      Just x  -> if x > 100 then 100 else x
+      Nothing -> 0
+  in claim "Min is the lowest score or zero,
+            and never greater than 100"
+    `that` (getMin << metrics)
+    `is` lowest
+    `for` state
+
+maxIsHighest = let
+  highest s =
+    case List.maximum <| List.map .score s of
+      Just x  -> if x < 0 then 0 else x
+      Nothing -> 0
+  in claim "Max is the heighest score or zero,
+            and never less than zero"
+    `that` (getMax << metrics)
+    `is` highest
+    `for` state
+
+avgIsTheAverage = let
+  fancyAvg s = let
+    n = toFloat <| List.length s
+    t = List.foldl (+) 0 s
+    in (1 / n) * t
+  sanitizeNaN x = if isNaN x then 0 else x
+  proof = round << sanitizeNaN
+                << fancyAvg
+                << List.map .score
+  in claim "Average is average"
+    `that` (getAvg << metrics)
+    `is` proof
+    `for` state
+
+averageIsBetweenMinAndMax = let
+  between (min, max, avg) = min <= avg && avg <= max
+                         && avg >= min && min <= max
+                         && avg <= max && max >= min
+  in claim "Average is in the middle, max is biggest, min is smallest"
+    `that` (between << metrics)
+    `is` always True
+    `for` state
+
+checkMetrics = suite "Metrics"
+  [ minIsLowest
+  , maxIsHighest
+  , avgIsTheAverage
+  , averageIsBetweenMinAndMax ]
 
 pure x = [x]
 
