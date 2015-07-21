@@ -8021,6 +8021,14 @@ Elm.Model.make = function (_elm) {
    var empty = {_: {}
                ,name: ""
                ,score: 0};
+   var setScore = F2(function (f,
+   _v1) {
+      return function () {
+         return _U.replace([["score"
+                            ,f(_v1.score)]],
+         _v1);
+      }();
+   });
    var Student = F2(function (a,
    b) {
       return {_: {}
@@ -8029,6 +8037,7 @@ Elm.Model.make = function (_elm) {
    });
    _elm.Model.values = {_op: _op
                        ,Student: Student
+                       ,setScore: setScore
                        ,empty: empty
                        ,Update: Update
                        ,Delete: Delete
@@ -20480,11 +20489,37 @@ Elm.Test.make = function (_elm) {
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
    $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
    $Model = Elm.Model.make(_elm),
    $Random$Extra = Elm.Random.Extra.make(_elm),
    $Shrink = Elm.Shrink.make(_elm);
    var pure = function (x) {
       return _L.fromArray([x]);
+   };
+   var getAvg = function (_v0) {
+      return function () {
+         switch (_v0.ctor)
+         {case "_Tuple3": return _v0._2;}
+         _U.badCase($moduleName,
+         "on line 116, column 22 to 25");
+      }();
+   };
+   var getMax = function (_v5) {
+      return function () {
+         switch (_v5.ctor)
+         {case "_Tuple3": return _v5._1;}
+         _U.badCase($moduleName,
+         "on line 115, column 22 to 25");
+      }();
+   };
+   var getMin = function (_v10) {
+      return function () {
+         switch (_v10.ctor)
+         {case "_Tuple3":
+            return _v10._0;}
+         _U.badCase($moduleName,
+         "on line 114, column 22 to 25");
+      }();
    };
    var student = function () {
       var generator = A2($Random$Extra.andMap,
@@ -20492,17 +20527,17 @@ Elm.Test.make = function (_elm) {
       $Model.Student,
       $Check$Investigator.random($Check$Investigator.string)),
       $Check$Investigator.random($Check$Investigator.$int));
-      var shrinker = function (_v0) {
+      var shrinker = function (_v15) {
          return function () {
             return A2($Shrink.andMap,
             A2($Shrink.map,
             $Model.Student,
             A2($Check$Investigator.shrink,
             $Check$Investigator.string,
-            _v0.name)),
+            _v15.name)),
             A2($Check$Investigator.shrink,
             $Check$Investigator.$int,
-            _v0.score));
+            _v15.score));
          }();
       };
       return A2($Check$Investigator.investigator,
@@ -20536,7 +20571,7 @@ Elm.Test.make = function (_elm) {
    var createIncreasesLength = A2($Check.$for,
    A2($Check.is,
    A2($Check.that,
-   $Check.claim("Create Increases Length"),
+   $Check.claim("Create increments length"),
    function ($) {
       return $List.length($Controller.control($Model.Create)($));
    }),
@@ -20564,11 +20599,267 @@ Elm.Test.make = function (_elm) {
       return A2($Check.$for,
       A2($Check.is,
       A2($Check.that,
-      $Check.claim("Delete Decreases Length"),
+      $Check.claim("Delete decrements length"),
       $delete),
       oneLess),
       state);
    }();
+   var deleteRemovesItemAtIndex = function () {
+      var match = F3(function (i,
+      i$,
+      x) {
+         return _U.eq(i,
+         i$) ? $Maybe.Nothing : $Maybe.Just(x);
+      });
+      var proof = function ($) {
+         return F2(function (x,y) {
+            return function ($) {
+               return x(y($));
+            };
+         })($List.filterMap($Basics.identity))($List.indexedMap(match($)));
+      };
+      var sanitize = function (_v17) {
+         return function () {
+            switch (_v17.ctor)
+            {case "_Tuple2":
+               return {ctor: "_Tuple2"
+                      ,_0: A3($Basics.clamp,
+                      0,
+                      $List.length(_v17._1) - 1,
+                      _v17._0)
+                      ,_1: _v17._1};}
+            _U.badCase($moduleName,
+            "on line 65, column 22 to 54");
+         }();
+      };
+      return A2($Check.$for,
+      A2($Check.is,
+      A2($Check.that,
+      $Check.claim("Delete removes item at index"),
+      function ($) {
+         return $Basics.uncurry(function ($) {
+            return $Controller.control($Model.Delete($));
+         })(sanitize($));
+      }),
+      function ($) {
+         return $Basics.uncurry(proof)(sanitize($));
+      }),
+      $Check$Investigator.tuple({ctor: "_Tuple2"
+                                ,_0: $Check$Investigator.$int
+                                ,_1: state}));
+   }();
+   var minIsLowest = function () {
+      var lowest = function (s) {
+         return function () {
+            var _v21 = $List.minimum(A2($List.map,
+            function (_) {
+               return _.score;
+            },
+            s));
+            switch (_v21.ctor)
+            {case "Just":
+               return _U.cmp(_v21._0,
+                 100) > 0 ? 100 : _v21._0;
+               case "Nothing": return 0;}
+            _U.badCase($moduleName,
+            "between lines 120 and 123");
+         }();
+      };
+      return A2($Check.$for,
+      A2($Check.is,
+      A2($Check.that,
+      $Check.claim("Min is the lowest score or zero,\n            and never greater than 100"),
+      function ($) {
+         return getMin($Model.metrics($));
+      }),
+      lowest),
+      state);
+   }();
+   var maxIsHighest = function () {
+      var highest = function (s) {
+         return function () {
+            var _v23 = $List.maximum(A2($List.map,
+            function (_) {
+               return _.score;
+            },
+            s));
+            switch (_v23.ctor)
+            {case "Just":
+               return _U.cmp(_v23._0,
+                 0) < 0 ? 0 : _v23._0;
+               case "Nothing": return 0;}
+            _U.badCase($moduleName,
+            "between lines 131 and 134");
+         }();
+      };
+      return A2($Check.$for,
+      A2($Check.is,
+      A2($Check.that,
+      $Check.claim("Max is the heighest score or zero,\n            and never less than zero"),
+      function ($) {
+         return getMax($Model.metrics($));
+      }),
+      highest),
+      state);
+   }();
+   var avgIsTheAverage = function () {
+      var sanitizeNaN = function (x) {
+         return $Basics.isNaN(x) ? 0 : x;
+      };
+      var fancyAvg = function (s) {
+         return function () {
+            var t = A3($List.foldl,
+            F2(function (x,y) {
+               return x + y;
+            }),
+            0,
+            s);
+            var n = $Basics.toFloat($List.length(s));
+            return 1 / n * t;
+         }();
+      };
+      var proof = function ($) {
+         return $Basics.round(sanitizeNaN(fancyAvg($List.map(function (_) {
+            return _.score;
+         })($))));
+      };
+      return A2($Check.$for,
+      A2($Check.is,
+      A2($Check.that,
+      $Check.claim("Average is average"),
+      function ($) {
+         return getAvg($Model.metrics($));
+      }),
+      proof),
+      state);
+   }();
+   var averageIsBetweenMinAndMax = function () {
+      var between = function (_v25) {
+         return function () {
+            switch (_v25.ctor)
+            {case "_Tuple3":
+               return _U.cmp(_v25._0,
+                 _v25._2) < 1 && (_U.cmp(_v25._2,
+                 _v25._1) < 1 && (_U.cmp(_v25._2,
+                 _v25._0) > -1 && (_U.cmp(_v25._0,
+                 _v25._1) < 1 && (_U.cmp(_v25._2,
+                 _v25._1) < 1 && _U.cmp(_v25._1,
+                 _v25._0) > -1))));}
+            _U.badCase($moduleName,
+            "between lines 155 and 157");
+         }();
+      };
+      return A2($Check.$for,
+      A2($Check.is,
+      A2($Check.that,
+      $Check.claim("Average is in the middle, max is biggest, min is smallest"),
+      function ($) {
+         return between($Model.metrics($));
+      }),
+      $Basics.always(true)),
+      state);
+   }();
+   var checkMetrics = A2($Check.suite,
+   "Metrics",
+   _L.fromArray([minIsLowest
+                ,maxIsHighest
+                ,avgIsTheAverage
+                ,averageIsBetweenMinAndMax]));
+   var updateClampsScore = function () {
+      var exaggerate = $Model.setScore(F2(function (x,
+      y) {
+         return x * y;
+      })(1000000));
+      var clean = $List.map($Model.setScore(A2($Basics.clamp,
+      0,
+      100)));
+      var isClamped = function (_v30) {
+         return function () {
+            return _U.cmp(_v30.score,
+            0) < 0 ? false : _U.cmp(_v30.score,
+            100) > 0 ? false : true;
+         }();
+      };
+      var proof = function (_v32) {
+         return function () {
+            switch (_v32.ctor)
+            {case "_Tuple2":
+               return function ($) {
+                    return $List.all(isClamped)($Controller.control($Model.Update({ctor: "_Tuple2"
+                                                                                  ,_0: _v32._0
+                                                                                  ,_1: exaggerate(_v32._1)}))(clean($)));
+                 };}
+            _U.badCase($moduleName,
+            "between lines 83 and 84");
+         }();
+      };
+      return A2($Check.$for,
+      A2($Check.is,
+      A2($Check.that,
+      $Check.claim("Score is clamped"),
+      $Basics.uncurry(proof)),
+      $Basics.always(true)),
+      $Check$Investigator.tuple({ctor: "_Tuple2"
+                                ,_0: $Check$Investigator.tuple({ctor: "_Tuple2"
+                                                               ,_0: $Check$Investigator.$int
+                                                               ,_1: student})
+                                ,_1: state}));
+   }();
+   var updateChangesItemAtIndex = function () {
+      var proof = F2(function (_v36,
+      state) {
+         return function () {
+            switch (_v36.ctor)
+            {case "_Tuple2":
+               return function () {
+                    switch (state.ctor)
+                    {case "[]": return true;}
+                    return function () {
+                       var changed = F2(function (i$,
+                       s$) {
+                          return _U.eq(_v36._0,
+                          i$) ? _U.eq(s$,
+                          A2($Model.setScore,
+                          A2($Basics.clamp,0,100),
+                          _v36._1)) : true;
+                       });
+                       var effected = A2($Controller.control,
+                       $Model.Update({ctor: "_Tuple2"
+                                     ,_0: _v36._0
+                                     ,_1: _v36._1}),
+                       state);
+                       return A2($List.all,
+                       $Basics.identity,
+                       A2($List.indexedMap,
+                       changed,
+                       effected));
+                    }();
+                 }();}
+            _U.badCase($moduleName,
+            "between lines 93 and 100");
+         }();
+      });
+      return A2($Check.$for,
+      A2($Check.is,
+      A2($Check.that,
+      $Check.claim("Update changes item at index, or no op"),
+      $Basics.uncurry(proof)),
+      $Basics.always(true)),
+      $Check$Investigator.tuple({ctor: "_Tuple2"
+                                ,_0: $Check$Investigator.tuple({ctor: "_Tuple2"
+                                                               ,_0: $Check$Investigator.$int
+                                                               ,_1: student})
+                                ,_1: state}));
+   }();
+   var checkControl = A2($Check.suite,
+   "Controller",
+   _L.fromArray([createAndDelete
+                ,emptyDoesNothing
+                ,createIncreasesLength
+                ,deleteDecreasesLength
+                ,deleteRemovesItemAtIndex
+                ,updateChangesItemAtIndex
+                ,updateClampsScore]));
    var test = function () {
       var details = function ($) {
          return pure($Html.details(_L.fromArray([$Html$Attributes.style(_L.fromArray([{ctor: "_Tuple2"
@@ -20580,28 +20871,26 @@ Elm.Test.make = function (_elm) {
             y);
          })(A2($Html.summary,
          _L.fromArray([]),
-         _L.fromArray([$Html.text("Tests")])))(pure($Check$Runner$Browser.display($Check.quickCheck($Check.suite("Controller")($)))))));
+         _L.fromArray([$Html.text("Tests")])))(pure($Check$Runner$Browser.display($Check.quickCheck($Check.suite("Students")($)))))));
       };
-      return details(_L.fromArray([createAndDelete
-                                  ,emptyDoesNothing
-                                  ,createIncreasesLength
-                                  ,deleteDecreasesLength]));
+      return details(_L.fromArray([checkControl
+                                  ,checkMetrics]));
    }();
-   var toTuple = function (_v2) {
+   var toTuple = function (_v41) {
       return function () {
          return {ctor: "_Tuple2"
-                ,_0: _v2.score
-                ,_1: _v2.name};
+                ,_0: _v41.score
+                ,_1: _v41.name};
       }();
    };
-   var fromTuple = function (_v4) {
+   var fromTuple = function (_v43) {
       return function () {
-         switch (_v4.ctor)
+         switch (_v43.ctor)
          {case "_Tuple2": return {_: {}
-                                 ,name: _v4._1
-                                 ,score: _v4._0};}
+                                 ,name: _v43._1
+                                 ,score: _v43._0};}
          _U.badCase($moduleName,
-         "on line 16, column 29 to 55");
+         "on line 18, column 29 to 55");
       }();
    };
    _elm.Test.values = {_op: _op
@@ -20613,6 +20902,18 @@ Elm.Test.make = function (_elm) {
                       ,emptyDoesNothing: emptyDoesNothing
                       ,createIncreasesLength: createIncreasesLength
                       ,deleteDecreasesLength: deleteDecreasesLength
+                      ,deleteRemovesItemAtIndex: deleteRemovesItemAtIndex
+                      ,updateClampsScore: updateClampsScore
+                      ,updateChangesItemAtIndex: updateChangesItemAtIndex
+                      ,checkControl: checkControl
+                      ,getMin: getMin
+                      ,getMax: getMax
+                      ,getAvg: getAvg
+                      ,minIsLowest: minIsLowest
+                      ,maxIsHighest: maxIsHighest
+                      ,avgIsTheAverage: avgIsTheAverage
+                      ,averageIsBetweenMinAndMax: averageIsBetweenMinAndMax
+                      ,checkMetrics: checkMetrics
                       ,pure: pure
                       ,test: test};
    return _elm.Test.values;
