@@ -90,13 +90,13 @@ updateClampsScore = let
 
 updateChangesItemAtIndex : Claim
 updateChangesItemAtIndex = let
-  proof (i, s) state = case state of
+  proof (at, with) state = case state of
     [] -> True
     _ -> let
-      effected = control (Update (i, s)) state
-      changed i' s' =
-        if i == i' then s' == s else True
-      in List.all identity (List.indexedMap changed state)
+      effected = control (Update (at, with)) state
+      changed i' s' = if at == i'
+        then s' == setScore (clamp 0 100) with else True
+      in List.all identity (List.indexedMap changed effected)
   in claim "Update changes item at index, or no op"
   `that` uncurry proof
   `is` always True
@@ -114,8 +114,6 @@ checkControl = suite "Controller"
 getMin (min, _, _) = min
 getMax (_, max, _) = max
 getAvg (_, _, avg) = avg
-
-(<$>) = List.map
 
 minIsLowest = let
   lowest s =
