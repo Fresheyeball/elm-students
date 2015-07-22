@@ -1914,18 +1914,10 @@ Elm.Controller.make = function (_elm) {
                  {case "_Tuple2":
                     return A2(updateAt,
                       _v0._0._0,
-                      _L.fromArray([_U.replace([["score"
-                                                ,function ($) {
-                                                   return A2($Basics.clamp,
-                                                   0,
-                                                   100)(function (_) {
-                                                      return _.score;
-                                                   }($));
-                                                }(_v0._0._1)]],
-                      _v0._0._1)]));}
+                      _L.fromArray([$Model.clampScore(_v0._0._1)]));}
                  break;}
             _U.badCase($moduleName,
-            "between lines 14 and 19");
+            "between lines 15 and 20");
          }();
       }();
    });
@@ -8018,26 +8010,24 @@ Elm.Model.make = function (_elm) {
       return {ctor: "Update"
              ,_0: a};
    };
-   var empty = {_: {}
-               ,name: ""
-               ,score: 0};
-   var setScore = F2(function (f,
-   _v1) {
-      return function () {
-         return _U.replace([["score"
-                            ,f(_v1.score)]],
-         _v1);
-      }();
-   });
    var Student = F2(function (a,
    b) {
       return {_: {}
              ,name: a
              ,score: b};
    });
+   var clampScore = function (_v1) {
+      return function () {
+         return Student(_v1.name)(A3($Basics.clamp,
+         0,
+         100,
+         _v1.score));
+      }();
+   };
+   var empty = A2(Student,"",0);
    _elm.Model.values = {_op: _op
                        ,Student: Student
-                       ,setScore: setScore
+                       ,clampScore: clampScore
                        ,empty: empty
                        ,Update: Update
                        ,Delete: Delete
@@ -20501,7 +20491,7 @@ Elm.Test.make = function (_elm) {
          switch (_v0.ctor)
          {case "_Tuple3": return _v0._2;}
          _U.badCase($moduleName,
-         "on line 116, column 22 to 25");
+         "on line 112, column 22 to 25");
       }();
    };
    var getMax = function (_v5) {
@@ -20509,7 +20499,7 @@ Elm.Test.make = function (_elm) {
          switch (_v5.ctor)
          {case "_Tuple3": return _v5._1;}
          _U.badCase($moduleName,
-         "on line 115, column 22 to 25");
+         "on line 111, column 22 to 25");
       }();
    };
    var getMin = function (_v10) {
@@ -20518,7 +20508,7 @@ Elm.Test.make = function (_elm) {
          {case "_Tuple3":
             return _v10._0;}
          _U.badCase($moduleName,
-         "on line 114, column 22 to 25");
+         "on line 110, column 22 to 25");
       }();
    };
    var student = function () {
@@ -20629,7 +20619,7 @@ Elm.Test.make = function (_elm) {
                       _v17._0)
                       ,_1: _v17._1};}
             _U.badCase($moduleName,
-            "on line 65, column 22 to 54");
+            "on line 60, column 22 to 54");
          }();
       };
       return A2($Check.$for,
@@ -20662,7 +20652,7 @@ Elm.Test.make = function (_elm) {
                  100) > 0 ? 100 : _v21._0;
                case "Nothing": return 0;}
             _U.badCase($moduleName,
-            "between lines 120 and 123");
+            "between lines 116 and 119");
          }();
       };
       return A2($Check.$for,
@@ -20689,7 +20679,7 @@ Elm.Test.make = function (_elm) {
                  0) < 0 ? 0 : _v23._0;
                case "Nothing": return 0;}
             _U.badCase($moduleName,
-            "between lines 131 and 134");
+            "between lines 127 and 130");
          }();
       };
       return A2($Check.$for,
@@ -20746,7 +20736,7 @@ Elm.Test.make = function (_elm) {
                  _v25._1) < 1 && _U.cmp(_v25._1,
                  _v25._0) > -1))));}
             _U.badCase($moduleName,
-            "between lines 155 and 157");
+            "between lines 151 and 153");
          }();
       };
       return A2($Check.$for,
@@ -20766,31 +20756,32 @@ Elm.Test.make = function (_elm) {
                 ,avgIsTheAverage
                 ,averageIsBetweenMinAndMax]));
    var updateClampsScore = function () {
-      var exaggerate = $Model.setScore(F2(function (x,
-      y) {
-         return x * y;
-      })(1000000));
-      var clean = $List.map($Model.setScore(A2($Basics.clamp,
-      0,
-      100)));
-      var isClamped = function (_v30) {
+      var exaggerate = function (_v30) {
          return function () {
-            return _U.cmp(_v30.score,
-            0) < 0 ? false : _U.cmp(_v30.score,
+            return A2($Model.Student,
+            _v30.name,
+            _v30.score * 1000000);
+         }();
+      };
+      var clean = $List.map($Model.clampScore);
+      var isClamped = function (_v32) {
+         return function () {
+            return _U.cmp(_v32.score,
+            0) < 0 ? false : _U.cmp(_v32.score,
             100) > 0 ? false : true;
          }();
       };
-      var proof = function (_v32) {
+      var proof = function (_v34) {
          return function () {
-            switch (_v32.ctor)
+            switch (_v34.ctor)
             {case "_Tuple2":
                return function ($) {
                     return $List.all(isClamped)($Controller.control($Model.Update({ctor: "_Tuple2"
-                                                                                  ,_0: _v32._0
-                                                                                  ,_1: exaggerate(_v32._1)}))(clean($)));
+                                                                                  ,_0: _v34._0
+                                                                                  ,_1: exaggerate(_v34._1)}))(clean($)));
                  };}
             _U.badCase($moduleName,
-            "between lines 83 and 84");
+            "between lines 79 and 80");
          }();
       };
       return A2($Check.$for,
@@ -20806,10 +20797,10 @@ Elm.Test.make = function (_elm) {
                                 ,_1: state}));
    }();
    var updateChangesItemAtIndex = function () {
-      var proof = F2(function (_v36,
+      var proof = F2(function (_v38,
       state) {
          return function () {
-            switch (_v36.ctor)
+            switch (_v38.ctor)
             {case "_Tuple2":
                return function () {
                     switch (state.ctor)
@@ -20817,16 +20808,14 @@ Elm.Test.make = function (_elm) {
                     return function () {
                        var changed = F2(function (i$,
                        s$) {
-                          return _U.eq(_v36._0,
+                          return _U.eq(_v38._0,
                           i$) ? _U.eq(s$,
-                          A2($Model.setScore,
-                          A2($Basics.clamp,0,100),
-                          _v36._1)) : true;
+                          $Model.clampScore(_v38._1)) : true;
                        });
                        var effected = A2($Controller.control,
                        $Model.Update({ctor: "_Tuple2"
-                                     ,_0: _v36._0
-                                     ,_1: _v36._1}),
+                                     ,_0: _v38._0
+                                     ,_1: _v38._1}),
                        state);
                        return A2($List.all,
                        $Basics.identity,
@@ -20836,7 +20825,7 @@ Elm.Test.make = function (_elm) {
                     }();
                  }();}
             _U.badCase($moduleName,
-            "between lines 93 and 100");
+            "between lines 89 and 96");
          }();
       });
       return A2($Check.$for,
@@ -20876,26 +20865,7 @@ Elm.Test.make = function (_elm) {
       return details(_L.fromArray([checkControl
                                   ,checkMetrics]));
    }();
-   var toTuple = function (_v41) {
-      return function () {
-         return {ctor: "_Tuple2"
-                ,_0: _v41.score
-                ,_1: _v41.name};
-      }();
-   };
-   var fromTuple = function (_v43) {
-      return function () {
-         switch (_v43.ctor)
-         {case "_Tuple2": return {_: {}
-                                 ,name: _v43._1
-                                 ,score: _v43._0};}
-         _U.badCase($moduleName,
-         "on line 18, column 29 to 55");
-      }();
-   };
    _elm.Test.values = {_op: _op
-                      ,fromTuple: fromTuple
-                      ,toTuple: toTuple
                       ,student: student
                       ,state: state
                       ,createAndDelete: createAndDelete
