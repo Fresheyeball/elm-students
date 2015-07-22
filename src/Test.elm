@@ -14,11 +14,6 @@ import Check exposing (..)
 import Check.Investigator exposing (..)
 import Check.Runner.Browser exposing (display)
 
-fromTuple : (Int, String) -> Student
-fromTuple (score, name) = { score = score, name = name }
-toTuple : Student -> (Int, String)
-toTuple {score, name} = (score, name)
-
 student : Investigator Student
 student = let
   shrinker { name, score } =
@@ -76,8 +71,9 @@ updateClampsScore = let
                          | score > 100 -> False
                          | otherwise   -> True
 
-  clean             = List.map << setScore <| clamp 0 100
-  exaggerate        = setScore << (*) <| 1000000
+  clean = List.map clampScore
+  exaggerate {name, score} =
+    Student name (score * 1000000)
 
   proof (i, s') =
     List.all isClamped
@@ -95,7 +91,7 @@ updateChangesItemAtIndex = let
     _ -> let
       effected = control (Update (at, with)) state
       changed i' s' = if at == i'
-        then s' == setScore (clamp 0 100) with else True
+        then s' == clampScore with else True
       in List.all identity (List.indexedMap changed effected)
   in claim "Update changes item at index, or no op"
   `that` uncurry proof

@@ -7,13 +7,11 @@ type alias Student =
   { name  : String
   , score : Int }
 
-setScore : (Int -> Int) -> Student -> Student
-setScore f ({score} as student) = { student | score <- f score }
+clampScore : Student -> Student
+clampScore {name, score} = Student name <| clamp 0 100 score
 
 empty : Student
-empty =
-  { name  = ""
-  , score = 0 }
+empty = Student "" 0
 
 type Input
   = Update (Int, Student)
