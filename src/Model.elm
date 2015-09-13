@@ -23,20 +23,14 @@ type alias State =
   List Student
 
 initial : State
-initial = []
-
-input : Mailbox Input
-input =
-  mailbox Empty
+initial = [empty]
 
 metrics : State -> (Int, Int, Int)
 metrics students = case students of
   [] -> (0, 0, 0)
   _  -> let
     scores = map .score students
-    min'   = foldr min 100   scores
-    max'   = foldr max 0     scores
-    avg'   = toFloat (sum    scores)
-           / toFloat (length scores)
-           |> round
+    min'   = foldr min 100 scores
+    max'   = foldr max 0   scores
+    avg'   = sum scores // length scores
     in (min', max', avg')

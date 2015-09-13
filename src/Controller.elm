@@ -4,17 +4,20 @@ import Result      exposing (..)
 import Signal      exposing (..)
 import List        exposing (take, drop)
 import Debug
+import Effects     exposing (Effects)
 
 import Model       exposing (..)
 
-control : Input -> State -> State
+control : Input -> State -> (State, Effects Input)
 control input state = let
-  updateAt : Int -> State-> State
+  updateAt : Int -> State -> State
   updateAt i x =
     take i state ++ x ++ drop (i + 1) state
-  in case Debug.watch "input" input of
+  newState : State
+  newState = case input of
     Create            -> state ++ [ empty ]
     Update (from, to) ->
       updateAt from [ clampScore to ]
     Delete corpse     -> updateAt corpse []
     Empty             -> state
+  in (newState, Effects.none)
