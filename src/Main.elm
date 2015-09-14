@@ -4,19 +4,31 @@ import Html            exposing (Html, div)
 import Html.Attributes exposing (class)
 import Signal          exposing (..)
 import Task            exposing (Task)
-import Debug
+import Effects         exposing (Never, Effects)
 
 import Model           exposing (..)
-import View            exposing (view, createKey)
-import Controller      exposing (control)
+import View
+import Update          exposing (update)
+import StartApp        exposing (App, Config)
 
 import Test
 
-port run : Signal (Task x ())
-port run = createKey
+view : Address Input -> Model -> Html
+view address model = div [ class "ui text container" ]
+  (View.view address model ++ Test.test)
+
+app : App Model
+app =
+  StartApp.start
+    { init   = (initial, Effects.none)
+    , update = update
+    , view   = view
+    , inputs = [] }
+
+port tasks : Signal (Task Never ())
+port tasks =
+  app.tasks
 
 main : Signal Html
-main = let
-  render state = div [ class "ui text container" ]
-    (view (Debug.watch "state" state) ++ Test.test)
-  in render <~ foldp control initial (.signal input)
+main =
+  app.html

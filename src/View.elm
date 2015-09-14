@@ -6,23 +6,11 @@ import Html.Shorthand  exposing (..)
 import Html.Attributes exposing (..)
 import Signal          exposing (Address)
 import List.Extra      exposing (dropWhile)
-import Json.Decode     exposing (decodeString, int)
-import Task            exposing (Task)
-import Keyboard
+import Json.Decode     exposing (decodeString, int, customDecoder)
 import List
 import String
-import Debug
 
 import Model exposing (..)
-
-createKey : Signal (Task x ())
-createKey = let
-  create : Task x ()
-  create = Signal.send (.address Model.input) Create
-  in Signal.filterMap
-    (\b -> if b then Just create else Nothing)
-    create
-    Keyboard.enter
 
 linkCSS : String -> Html
 linkCSS url = node "link"
@@ -41,21 +29,30 @@ semantic'ui = let
      , semantic "container"
      , semantic "label" ]
 
-studentTable : List Student -> Html
-studentTable students = let
+studentTable : Address Input -> List Student -> Html
+studentTable address students = let
   field :  (Student -> String)
         -> (String  -> Student)
         -> Int -> Student -> String -> Html
   field l f index student placeholder' = let
     message s =
       Signal.message
-      (.address Model.input)
+      address
       (Update (index, f s) )
     in div [ class "ui big input fluid" ]
       [ Html.input [ on "input" targetValue message
-                   , autofocus (index == 0)
+                   , onEnter address Create
+                   , autofocus (index == List.length students - 1)
                    , placeholder placeholder'
                    , value (l student) ] [] ]
+
+  onEnter : Address a -> a -> Attribute
+  onEnter address value = let
+    is13 code =
+      if code == 13 then Ok () else Err "not the right key code"
+    in on "keydown"
+      (customDecoder keyCode is13)
+      (\_ -> Signal.message address value)
 
   name : Int -> Student -> Html
   name index student =
@@ -86,7 +83,7 @@ studentTable students = let
       [ score index student ]
     , td [ class "collapsing" ]
       [ button [ class "ui button tiny"
-               , onClick (.address Model.input) (Delete index) ]
+               , onClick address (Delete index) ]
         [ text "Delete" ] ] ]
 
   title : Html
@@ -100,9 +97,9 @@ studentTable students = let
     [ thead_ [ title ]
     , tbody_ (List.indexedMap row students)
     , tfoot_ [ tr_ [ th [ colspan 3 ]
-                     [ create, minMaxAvg students ] ] ] ]
+                     [ create address, minMaxAvg students ] ] ] ]
 
-minMaxAvg : State -> Html
+minMaxAvg : Model -> Html
 minMaxAvg students = let
   (min', max', avg') = metrics students
 
@@ -120,12 +117,12 @@ minMaxAvg students = let
     , label "Max" max'
     , label "Avg" avg' ]
 
-create : Html
-create =
+create : Address Input -> Html
+create address =
   button [ class "ui button primary tiny"
-         , onClick (.address Model.input) Create ]
+         , onClick address Create ]
   [ text "Add Student" ]
 
-view : State -> List Html
-view state =
-  semantic'ui ++ [ studentTable state ]
+view : Address Input -> Model -> List Html
+view address model =
+  semantic'ui ++ [ studentTable address model ]
