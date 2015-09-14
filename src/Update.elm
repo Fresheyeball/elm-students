@@ -1,4 +1,4 @@
-module Controller where
+module Update where
 
 import Result      exposing (..)
 import Signal      exposing (..)
@@ -8,8 +8,8 @@ import Effects     exposing (Effects)
 
 import Model       exposing (..)
 
-control : Input -> State -> (State, Effects Input)
-control input state = let
+update : Input -> State -> (State, Effects Input)
+update input state = let
   updateAt : Int -> State -> State
   updateAt i x =
     take i state ++ x ++ drop (i + 1) state

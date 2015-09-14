@@ -9,20 +9,20 @@ import Debug
 
 import Model           exposing (..)
 import View
-import Controller      exposing (control)
+import Update          exposing (update)
 import StartApp        exposing (App, Config)
 
--- import Test
+import Test
 
 view : Address Input -> State -> Html
 view address state = div [ class "ui text container" ]
-  (View.view address (Debug.watch "state" state) )
+  (View.view address (Debug.watch "state" state) ++ Test.test)
 
 app : App State
 app =
   StartApp.start
     { init   = (initial, Effects.none)
-    , update = control
+    , update = update
     , view   = view
     , inputs = [] }
 
