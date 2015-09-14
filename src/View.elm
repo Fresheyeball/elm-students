@@ -1,28 +1,16 @@
 module View where
 
 import Html            exposing (..)
-import Html.Events     exposing (onClick, on, targetValue)
+import Html.Events     exposing (..)
 import Html.Shorthand  exposing (..)
 import Html.Attributes exposing (..)
 import Signal          exposing (Address)
 import List.Extra      exposing (dropWhile)
-import Json.Decode     exposing (decodeString, int)
-import Task            exposing (Task)
-import Keyboard
+import Json.Decode     exposing (decodeString, int, customDecoder)
 import List
 import String
-import Debug
 
 import Model exposing (..)
-
--- createKey : Signal (Task x ())
--- createKey = let
---   create : Task x ()
---   create = Signal.send (.address Model.input) Create
---   in Signal.filterMap
---     (\b -> if b then Just create else Nothing)
---     create
---     Keyboard.enter
 
 linkCSS : String -> Html
 linkCSS url = node "link"
@@ -53,9 +41,18 @@ studentTable address students = let
       (Update (index, f s) )
     in div [ class "ui big input fluid" ]
       [ Html.input [ on "input" targetValue message
-                   , autofocus (index == 0)
+                   , onEnter address Create
+                   , autofocus (index == List.length students - 1)
                    , placeholder placeholder'
                    , value (l student) ] [] ]
+
+  onEnter : Address a -> a -> Attribute
+  onEnter address value = let
+    is13 code =
+      if code == 13 then Ok () else Err "not the right key code"
+    in on "keydown"
+      (customDecoder keyCode is13)
+      (\_ -> Signal.message address value)
 
   name : Int -> Student -> Html
   name index student =
@@ -102,7 +99,7 @@ studentTable address students = let
     , tfoot_ [ tr_ [ th [ colspan 3 ]
                      [ create address, minMaxAvg students ] ] ] ]
 
-minMaxAvg : State -> Html
+minMaxAvg : Model -> Html
 minMaxAvg students = let
   (min', max', avg') = metrics students
 
@@ -126,6 +123,6 @@ create address =
          , onClick address Create ]
   [ text "Add Student" ]
 
-view : Address Input -> State -> List Html
-view address state =
-  semantic'ui ++ [ studentTable address state ]
+view : Address Input -> Model -> List Html
+view address model =
+  semantic'ui ++ [ studentTable address model ]

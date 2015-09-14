@@ -5,11 +5,10 @@ import List
 import Html as H
 import Html.Attributes as A
 import Random.Extra as Random
-import Debug
 import Effects exposing (Effects)
 
-import Model       exposing (..)
-import Update  exposing (..)
+import Model exposing (..)
+import Update exposing (..)
 
 import Check exposing (..)
 import Check.Investigator exposing (..)
@@ -25,28 +24,28 @@ student = let
             `Random.andMap` random int
   in investigator generator shrinker
 
-state : Investigator State
-state = list student
+model : Investigator Model
+model = list student
 
--- createAndDelete : Claim
--- createAndDelete = let
---   f : State -> (State, Effects Input)
---   f state =
---     update (Delete (List.length state)) (update Create state)
---   in
---   claim "Delete on last element, should reset Create"
---     `that` (fst << f) `is` (fst << identity) `for` state
+createAndDelete : Claim
+createAndDelete = let
+  f : Model -> (Model, Effects Input)
+  f model =
+    update (Delete (List.length model)) (fst <| update Create model)
+  in
+  claim "Delete on last element, should reset Create"
+    `that` (fst << f) `is` identity `for` model
 
 emptyDoesNothing : Claim
 emptyDoesNothing =
   claim "Empty input does nothing"
-    `that` (fst << update Empty) `is` identity `for` state
+    `that` (fst << update Empty) `is` identity `for` model
 
 createIncreasesLength : Claim
 createIncreasesLength =
   claim "Create increments length"
     `that` (update Create >> fst >> List.length)
-    `is` (List.length >> (+) 1) `for` state
+    `is` (List.length >> (+) 1) `for` model
 
 deleteDecreasesLength : Claim
 deleteDecreasesLength = let
@@ -54,7 +53,7 @@ deleteDecreasesLength = let
   delete = update (Delete 0) >> fst >> List.length >> noLess
   oneLess = List.length >> flip (-) 1 >> noLess
   in claim "Delete decrements length"
-    `that` delete `is` oneLess `for` state
+    `that` delete `is` oneLess `for` model
 
 deleteRemovesItemAtIndex : Claim
 deleteRemovesItemAtIndex = let
@@ -64,7 +63,7 @@ deleteRemovesItemAtIndex = let
   in claim "Delete removes item at index"
   `that` (fst << uncurry (update << Delete) << sanitize)
   `is`   (uncurry proof << sanitize)
-  `for` tuple (int, state)
+  `for` tuple (int, model)
 
 updateClampsScore : Claim
 updateClampsScore = let
@@ -84,35 +83,40 @@ updateClampsScore = let
   in claim "Score is clamped"
     `that` uncurry proof
     `is` always True
-    `for` tuple (tuple (int, student), state)
+    `for` tuple (tuple (int, student), model)
 
 updateChangesItemAtIndex : Claim
 updateChangesItemAtIndex = let
-  proof (at, with) state = case state of
+  proof (at, with) model = case model of
     [] -> True
     _  -> let
-      (effected, _) = update (Update (at, with)) state
+      (effected, _) = update (Update (at, with)) model
       changed i' s' = if at == i'
         then s' == clampScore with else True
       in List.all identity (List.indexedMap changed effected)
   in claim "Update changes item at index, or no op"
   `that` uncurry proof
   `is` always True
-  `for` tuple (tuple (int, student), state)
+  `for` tuple (tuple (int, student), model)
 
+checkupdate : Claim
 checkupdate = suite "Update"
-  -- [ createAndDelete
-  [ emptyDoesNothing
+  [ createAndDelete
+  , emptyDoesNothing
   , createIncreasesLength
   , deleteDecreasesLength
   , deleteRemovesItemAtIndex
   , updateChangesItemAtIndex
   , updateClampsScore ]
 
+getMin : Metrics -> Int
 getMin (min, _, _) = min
+getMax : Metrics -> Int
 getMax (_, max, _) = max
+getAvg : Metrics -> Int
 getAvg (_, _, avg) = avg
 
+minIsLowest : Claim
 minIsLowest = let
   lowest s =
     case List.minimum <| List.map .score s of
@@ -122,8 +126,9 @@ minIsLowest = let
             and never greater than 100"
     `that` (getMin << metrics)
     `is` lowest
-    `for` state
+    `for` model
 
+maxIsHighest : Claim
 maxIsHighest = let
   highest s =
     case List.maximum <| List.map .score s of
@@ -133,22 +138,25 @@ maxIsHighest = let
             and never less than zero"
     `that` (getMax << metrics)
     `is` highest
-    `for` state
+    `for` model
 
+avgIsTheAverage : Claim
 avgIsTheAverage = let
+  fancyAvg : List Int -> Float
   fancyAvg s = let
     n = toFloat <| List.length s
     t = List.foldl (+) 0 s
     in (1 / n) * t
   sanitizeNaN x = if isNaN x then 0 else x
+  proof : Model -> Int
   proof = round << sanitizeNaN
                 << fancyAvg
                 << List.map .score
   in claim "Average is average"
     `that` (getAvg << metrics)
-    `is` proof
-    `for` state
+    `is` proof `for` model
 
+averageIsBetweenMinAndMax : Claim
 averageIsBetweenMinAndMax = let
   between (min, max, avg) = min <= avg && avg <= max
                          && avg >= min && min <= max
@@ -156,14 +164,16 @@ averageIsBetweenMinAndMax = let
   in claim "Average is in the middle, max is biggest, min is smallest"
     `that` (between << metrics)
     `is` always True
-    `for` state
+    `for` model
 
+checkMetrics : Claim
 checkMetrics = suite "Metrics"
   [ minIsLowest
   , maxIsHighest
   , avgIsTheAverage
   , averageIsBetweenMinAndMax ]
 
+pure : a -> List a
 pure x = [x]
 
 test : List H.Html

@@ -5,7 +5,6 @@ import Html.Attributes exposing (class)
 import Signal          exposing (..)
 import Task            exposing (Task)
 import Effects         exposing (Never, Effects)
-import Debug
 
 import Model           exposing (..)
 import View
@@ -14,11 +13,11 @@ import StartApp        exposing (App, Config)
 
 import Test
 
-view : Address Input -> State -> Html
-view address state = div [ class "ui text container" ]
-  (View.view address (Debug.watch "state" state) ++ Test.test)
+view : Address Input -> Model -> Html
+view address model = div [ class "ui text container" ]
+  (View.view address model ++ Test.test)
 
-app : App State
+app : App Model
 app =
   StartApp.start
     { init   = (initial, Effects.none)

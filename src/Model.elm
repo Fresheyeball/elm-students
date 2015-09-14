@@ -1,6 +1,5 @@
 module Model where
 
-import Signal exposing (Mailbox, mailbox)
 import List exposing (map, foldr, sum, length)
 
 type alias Student =
@@ -19,18 +18,22 @@ type Input
   | Create
   | Empty
 
-type alias State =
+type alias Model =
   List Student
 
-initial : State
+type alias Metrics =
+  (Int, Int, Int)
+
+initial : Model
 initial = [empty]
 
-metrics : State -> (Int, Int, Int)
+metrics : Model -> Metrics
 metrics students = case students of
   [] -> (0, 0, 0)
   _  -> let
+    x // y = round <| toFloat x / toFloat y
     scores = map .score students
-    min'   = foldr min 100 scores
-    max'   = foldr max 0   scores
+    min'   = foldr min 100   scores
+    max'   = foldr max 0     scores
     avg'   = sum scores // length scores
     in (min', max', avg')

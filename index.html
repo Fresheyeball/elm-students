@@ -802,30 +802,30 @@ Elm.Controller.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var control = F2(function (input,
-   state) {
+   Model) {
       return function () {
          var updateAt = F2(function (i,
          x) {
             return A2($Basics._op["++"],
-            A2($List.take,i,state),
+            A2($List.take,i,Model),
             A2($Basics._op["++"],
             x,
-            A2($List.drop,i + 1,state)));
+            A2($List.drop,i + 1,Model)));
          });
-         var newState = function () {
+         var newModel = function () {
             var _v0 = A2($Debug.watch,
             "input",
             input);
             switch (_v0.ctor)
             {case "Create":
                return A2($Basics._op["++"],
-                 state,
+                 Model,
                  _L.fromArray([$Model.empty]));
                case "Delete":
                return A2(updateAt,
                  _v0._0,
                  _L.fromArray([]));
-               case "Empty": return state;
+               case "Empty": return Model;
                case "Update":
                switch (_v0._0.ctor)
                  {case "_Tuple2":
@@ -837,7 +837,7 @@ Elm.Controller.make = function (_elm) {
             "between lines 17 and 23");
          }();
          return {ctor: "_Tuple2"
-                ,_0: state
+                ,_0: Model
                 ,_1: $Effects.none};
       }();
    });
@@ -7691,14 +7691,14 @@ Elm.Main.make = function (_elm) {
    $Task = Elm.Task.make(_elm),
    $View = Elm.View.make(_elm);
    var view = F2(function (address,
-   state) {
+   Model) {
       return A2($Html.div,
       _L.fromArray([$Html$Attributes.$class("ui text container")]),
       A2($View.view,
       address,
       A2($Debug.watch,
-      "state",
-      state)));
+      "Model",
+      Model)));
    });
    var app = $StartApp.start({_: {}
                              ,init: {ctor: "_Tuple2"
@@ -11448,7 +11448,7 @@ if (!Elm.fullscreen) {
 
 		function init(display, container, module, args, moduleToReplace)
 		{
-			// defining state needed for an instance of the Elm RTS
+			// defining Model needed for an instance of the Elm RTS
 			var inputs = [];
 
 			/* OFFSET
@@ -11758,23 +11758,23 @@ if (!Elm.fullscreen) {
 
 			// domUpdate is called whenever the main Signal changes.
 			//
-			// domUpdate and drawCallback implement a small state machine in order
+			// domUpdate and drawCallback implement a small Model machine in order
 			// to schedule only 1 draw per animation frame. This enforces that
 			// once draw has been called, it will not be called again until the
 			// next frame.
 			//
 			// drawCallback is scheduled whenever
-			// 1. The state transitions from PENDING_REQUEST to EXTRA_REQUEST, or
-			// 2. The state transitions from NO_REQUEST to PENDING_REQUEST
+			// 1. The Model transitions from PENDING_REQUEST to EXTRA_REQUEST, or
+			// 2. The Model transitions from NO_REQUEST to PENDING_REQUEST
 			//
 			// Invariants:
-			// 1. In the NO_REQUEST state, there is never a scheduled drawCallback.
-			// 2. In the PENDING_REQUEST and EXTRA_REQUEST states, there is always exactly 1
+			// 1. In the NO_REQUEST Model, there is never a scheduled drawCallback.
+			// 2. In the PENDING_REQUEST and EXTRA_REQUEST Models, there is always exactly 1
 			//    scheduled drawCallback.
 			var NO_REQUEST = 0;
 			var PENDING_REQUEST = 1;
 			var EXTRA_REQUEST = 2;
-			var state = NO_REQUEST;
+			var Model = NO_REQUEST;
 			var savedScene = initialScene;
 			var scheduledScene = initialScene;
 
@@ -11782,27 +11782,27 @@ if (!Elm.fullscreen) {
 			{
 				scheduledScene = newScene;
 
-				switch (state)
+				switch (Model)
 				{
 					case NO_REQUEST:
 						_requestAnimationFrame(drawCallback);
-						state = PENDING_REQUEST;
+						Model = PENDING_REQUEST;
 						return;
 					case PENDING_REQUEST:
-						state = PENDING_REQUEST;
+						Model = PENDING_REQUEST;
 						return;
 					case EXTRA_REQUEST:
-						state = PENDING_REQUEST;
+						Model = PENDING_REQUEST;
 						return;
 				}
 			}
 
 			function drawCallback()
 			{
-				switch (state)
+				switch (Model)
 				{
 					case NO_REQUEST:
-						// This state should not be possible. How can there be no
+						// This Model should not be possible. How can there be no
 						// request, yet somehow we are actively fulfilling a
 						// request?
 						throw new Error(
@@ -11816,7 +11816,7 @@ if (!Elm.fullscreen) {
 						// case. It's possible to drop a frame if rAF is called
 						// too late, so we just do it preemptively.
 						_requestAnimationFrame(drawCallback);
-						state = EXTRA_REQUEST;
+						Model = EXTRA_REQUEST;
 
 						// There's also stuff we definitely need to draw.
 						draw();
@@ -11826,7 +11826,7 @@ if (!Elm.fullscreen) {
 						// Turns out the extra request was not needed, so we will
 						// stop calling rAF. No reason to call it all the time if
 						// no one needs it.
-						state = NO_REQUEST;
+						Model = NO_REQUEST;
 						return;
 				}
 			}
@@ -12451,14 +12451,14 @@ Elm.Native.Signal.make = function(localRuntime) {
 
 	// FOLD
 
-	function foldp(update, state, signal)
+	function foldp(update, Model, signal)
 	{
 		var node = {
 			id: Utils.guid(),
 			name: 'foldp',
 			parents: [signal],
 			kids: [],
-			value: state
+			value: Model
 		};
 
 		node.notify = function(timestamp, parentUpdate, parentID)
@@ -17285,12 +17285,12 @@ Elm.View.make = function (_elm) {
                           ,semantic("label")]);
    }();
    var view = F2(function (address,
-   state) {
+   Model) {
       return A2($Basics._op["++"],
       semantic$ui,
       _L.fromArray([A2(studentTable,
       address,
-      state)]));
+      Model)]));
    });
    _elm.View.values = {_op: _op
                       ,linkCSS: linkCSS

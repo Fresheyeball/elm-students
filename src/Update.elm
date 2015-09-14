@@ -1,23 +1,20 @@
 module Update where
 
-import Result      exposing (..)
-import Signal      exposing (..)
 import List        exposing (take, drop)
-import Debug
 import Effects     exposing (Effects)
 
 import Model       exposing (..)
 
-update : Input -> State -> (State, Effects Input)
-update input state = let
-  updateAt : Int -> State -> State
+update : Input -> Model -> (Model, Effects Input)
+update input model = let
+  updateAt : Int -> Model -> Model
   updateAt i x =
-    take i state ++ x ++ drop (i + 1) state
-  newState : State
-  newState = case input of
-    Create            -> state ++ [ empty ]
+    take i model ++ x ++ drop (i + 1) model
+  newModel : Model
+  newModel = case input of
+    Create            -> model ++ [ empty ]
     Update (from, to) ->
       updateAt from [ clampScore to ]
     Delete corpse     -> updateAt corpse []
-    Empty             -> state
-  in (newState, Effects.none)
+    Empty             -> model
+  in (newModel, Effects.none)
